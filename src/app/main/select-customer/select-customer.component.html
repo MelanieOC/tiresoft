@@ -1,0 +1,22 @@
+<div class="ts-container">
+    <mat-card>
+        <mat-card-title style="font-size: 16px;">
+            Debe seleccionar cliente para continuar
+        </mat-card-title>
+        <hr>
+        <mat-card-content style="padding-top: 16px;">
+            <mat-form-field style="width: 100%;">
+                <mat-label>Cliente</mat-label>
+                <mat-select disableOptionCentering [formControl]="customerForm">
+                    <mat-option *ngFor="let c of listCustomer" [value]="c">Razón Social: {{c.razon_social}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+            <div fxLayout="row wrap" fxLayoutAlign="end end">
+                <button color="primary" (click)="selectCustomer()" mat-flat-button>Confirmar Cliente</button>
+            </div>
+
+        </mat-card-actions>
+    </mat-card>
+</div>

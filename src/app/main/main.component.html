@@ -1,0 +1,87 @@
+<mat-toolbar class="main__toolbar">
+
+    <mat-toolbar-row>
+        <button *ngIf="isOver()" mat-icon-button (click)="toggleSideMenu()">
+            <mat-icon class="dark-icon">menu</mat-icon>
+        </button>
+        <a class="w3-margin-left w3-margin-right main__logo">
+            <img src="../../assets/img/logotiresoftb.png" class="main__logoimage" alt="logo" />
+        </a>
+        <span *ngIf="client$ | async as cl" class="name-customer">{{cl.razon_social}}</span>
+    </mat-toolbar-row>
+</mat-toolbar>
+<ng-container *ngIf="routeChange$ | async"></ng-container>
+<mat-sidenav-container class="main-container">
+    <mat-sidenav [opened]="!isOver()" [mode]="isOver() ? 'over' : 'side'" #sideMenu>
+        <div class="sider">
+            <div class="user-div">
+                <div>
+                    <img src="../../assets/img/user.png" alt="">
+                </div>
+                <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+                    <div class="user-name">
+                        <div style="font-size: 14px;">{{user.name}} </div>
+                        <div style="font-size: 12px;"> {{user.email}}</div>
+                    </div>
+                    <div>
+                        <button style="color: white;" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="logout()">
+                                <span>Cerrar Sesión</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="menu-header">
+                    Menu principal
+                </div>
+                <div class="menu">
+                    <div *ngIf="client$ | async else select">
+                        <button mat-button class="menu__button" routerLink="home" >
+                            <mat-icon class="menu__icon">home</mat-icon>
+                            Inicio
+                        </button>
+                        <mat-expansion-panel style="box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-block"
+                            [ngClass]="{'ms-expansion-panel-menu':confiOpenedFlag}" (opened)="confiOpened()"
+                            (closed)="confiClosed()">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title style="font-weight:500" routerLinkActive="nav-active">
+                                    <mat-icon class="menu__icon">widgets</mat-icon> Inspección
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <button mat-button class="menu__button" routerLink="inspecciones/create">
+                                Registra Inspección
+                            </button>
+                            <button mat-button class="menu__button" routerLink="inspecciones">
+                                Reporte Inspección
+                            </button>
+                            <p class="w3-margin-bottom"></p>
+
+                        </mat-expansion-panel>
+                        <button mat-button class="menu__button" routerLink="clientes" (click)="deselectClient()">
+                            <mat-icon class="menu__icon">keyboard_arrow_left</mat-icon>
+                            Salir del cliente
+                        </button>
+                    </div>
+
+
+                </div>
+                <ng-template #select>
+                    <button mat-button class="menu__button" routerLink="clientes" routerLinkActive="nav-active">
+                        <mat-icon class="menu__icon">group</mat-icon>
+                        Seleccionar Cliente
+                    </button>
+                </ng-template>
+            </div>
+
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content cdkScrollable>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

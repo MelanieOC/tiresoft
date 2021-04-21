@@ -1,0 +1,38 @@
+<mat-toolbar>
+    <span>Registro de Inspección</span>
+</mat-toolbar>
+<div class="ts-container" *ngIf="view == 1">
+    <mat-horizontal-stepper linear #stepper>
+        <mat-step [stepControl]="inspectForm">
+            <ng-template matStepLabel>Registro</ng-template>
+            <app-register-form (onVehicle)="getVehicleInfo($event)" (onSave)="getInfoData($event)"></app-register-form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Neumáticos</ng-template>
+            <div class="vehicle">
+                Vehículo: {{selectVehicle}}
+            </div>
+            <div style="max-width: 300px;margin: 20px auto;">
+                <div *ngFor="let row of ubication;let k = index ">
+                    <div class="row-tire" fxLayout="row wrap" fxLayoutAlign="center start" *ngIf="rowsUbication[k]">
+                        <div *ngFor="let slot of row;let j = index " class="bg-black"
+                            [ngClass]="{'blanck-div': slot.id == -2, 'tire-div':slot.id != -2}">
+                            <button class="tire" fxLayout="row wrap" fxLayoutAlign="center center"
+                                [ngClass]="{'press': !!slot.name}" (click)="openBottom(slot,k,j)">
+                                <div>
+                                    <mat-icon *ngIf="!!slot.value; else position">check_circle</mat-icon>
+                                    <ng-template #position>
+                                        <div>{{slot.name?slot.name:''}}</div>
+                                    </ng-template>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <app-table-responsive [data]="rows" [columns]="columns" [show]="2" [search]="false" [options]="false"
+                [delete]="true" (onEdit)="openEditBottom($event)" (onDialog)="deleteRow($event)"></app-table-responsive>
+        </mat-step>
+    </mat-horizontal-stepper>
+
+</div>

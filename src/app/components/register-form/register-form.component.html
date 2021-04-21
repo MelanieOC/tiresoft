@@ -1,0 +1,86 @@
+<form [formGroup]="inspectForm">
+    <div fxLayout="row wrap" fxLayoutAlign="start start">
+        <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+            <mat-label>Código de Inspección</mat-label>
+            <input matInput type="text" autocomplete="off" formControlName="code">
+        </mat-form-field>
+        <div class="pl-xs pr-xs" fxLayout="row wrap" fxLayoutAlign="start end" fxFlex="100" fxFlex.gt-xs="50">
+            <mat-form-field fxFlex="100">
+                <mat-label>Flota</mat-label>
+                <input matInput readonly type="text" autocomplete="off" formControlName="customer">
+            </mat-form-field>
+            <mat-form-field fxFlex="100">
+                <mat-label>RUC</mat-label>
+                <input matInput readonly type="text" autocomplete="off" formControlName="ruc">
+            </mat-form-field>
+        </div>
+
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="start end">
+        <mat-form-field class="pl-xs pr-xs" style="margin-bottom: 8px;" fxFlex="100" fxFlex.gt-xs="50"
+            fxFlex.gt-md="25">
+            <mat-label>Vehículo</mat-label>
+            <mat-select disableOptionCentering required formControlName="tow" required>
+                <mat-option>
+                    <ngx-mat-select-search formControlName="filter" placeholderLabel="Buscar..."
+                        noEntriesFoundLabel="'Sin Resultados'"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let c of filtered$ | async" [value]="c.id_vehiculo">
+                    {{c.placa}} | {{c.codigo}}
+                </mat-option>
+            </mat-select>
+            <mat-error>
+                Completa este campo.
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" style="margin-bottom: 8px;" fxFlex="100" fxFlex.gt-xs="50"
+            fxFlex.gt-md="25">
+            <mat-label>Fecha de Inspección</mat-label>
+            <input readonly matInput required formControlName="date" placeholder="dd/mm/aaaa" [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error>
+                <span *ngIf="inspectForm.get('date').errors?.required">Campo requerido</span>
+                <span *ngIf="inspectForm.get('date').errors?.validateDate">
+                    La fecha ingresada debe ser mayor o igual a la fecha de inspección {{vehicle.fecha |
+                    date:'dd-MM-yyyy'}}</span>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" style="margin-bottom: 8px;" fxFlex="100" fxFlex.gt-xs="50"
+            fxFlex.gt-md="25">
+            <mat-label>Kilometraje/Horas Actual</mat-label>
+            <input matInput required type="number" [min]="0" autocomplete="off" formControlName="mileage">
+            <mat-error>
+                <span *ngIf="inspectForm.get('mileage').errors?.required">Campo requerido</span>
+                <span *ngIf="inspectForm.get('mileage').errors?.min">
+                    El kilometraje ingresado debe ser mayor o igual al kilometraje de inspección
+                    {{vehicle.kilometraje}}</span>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" style="margin-bottom: 8px;" fxFlex="100" fxFlex.gt-xs="50"
+            fxFlex.gt-md="25">
+            <mat-label>Planta</mat-label>
+            <mat-select formControlName="plant">
+                <mat-option *ngFor="let p of plants" [value]="p.id_planta">{{p.nombre}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <ng-container *ngIf="vehicle$ | async"></ng-container>
+    <div fxLayout="row wrap" fxLayoutAlign="start center">
+        <div class="pl-xs pr-xs" style="margin-bottom: 10px;" fxFlex="100" fxFlex.gt-xs="50">
+
+            <mat-slide-toggle class="example-margin" formControlName="spare_tire" color="warn">
+                Unidad Tiene Llanta de Repuesto
+            </mat-slide-toggle>
+        </div>
+        <div class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+            <mat-slide-toggle class="example-margin" formControlName="tire_carrier" color="warn">
+                Unidad Tiene Porta Llanta
+            </mat-slide-toggle>
+        </div>
+    </div>
+
+</form>
+<div fxLayout="row wrap" fxLayoutAlign="end end">
+    <button color="primary" mat-flat-button [disabled]="inspectForm.invalid" (click)="save()">Guardar</button>
+</div>

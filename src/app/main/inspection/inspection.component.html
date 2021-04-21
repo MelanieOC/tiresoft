@@ -1,0 +1,7 @@
+<mat-toolbar>
+    <span>Reporte de Inspecciones</span>
+</mat-toolbar>
+<div class="ts-container">
+    <app-table-responsive [data]="allData" [columns]="columns" [show]="3" [search]="true" [options]="true"
+        [delete]="false" (onEdit)="editRegister($event)" (onDialog)="optionsDialog($event)"></app-table-responsive>
+</div>

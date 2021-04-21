@@ -1,0 +1,55 @@
+<div class="login-container" fxLayout="row wrap" fxLayoutAlign="center center">
+    <div class="login-form">
+        <div>
+            <div style="margin-bottom: 10px;text-align: center;">
+                <img src="../../assets/img/logo2.png" alt="" style=" width: 192px;">
+            </div>
+            <div *ngIf="customer$ | async as use; else noLogin">
+                <div class="user-div">
+                    <p>Hola,</p>
+                    <p>{{use.name}}</p>
+                </div>
+                <div fxLayout="row wrap" fxLayoutAlign="end end" style="margin-bottom: 16px;">
+                    <button color="warn" [disabled]="load" style="margin-right: 5px;" mat-stroked-button (click)="logout()">
+                        Cerrar Sesión
+                    </button>
+                    <button color="warn" [disabled]="load" mat-raised-button (click)="goInit()">
+                        Ingresar
+                    </button>
+                </div>
+            </div>
+            <ng-template #noLogin>
+                <form [formGroup]="dataFormGroup">
+                    <mat-form-field style="width:100%;margin-bottom: 16px;" style="display:block">
+                        <mat-label>Usuario</mat-label>
+                        <mat-icon matPrefix style="vertical-align: middle;margin-right: 8px;">person</mat-icon>
+                        <input matInput type="email" formControlName="email" placeholder="Correo electrónico"
+                            autocomplete="off">
+                    </mat-form-field>
+    
+                    <mat-form-field style="width:100%;margin-bottom: 16px;" style="display:block">
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput [type]="hidePass ? 'password' : 'text'" formControlName="pass" placeholder="***"
+                            autocomplete="off">
+                        <mat-icon matPrefix style="vertical-align: middle;margin-right: 8px;">lock</mat-icon>
+                        <button type="button" mat-icon-button matSuffix (click)="hidePass = !hidePass"
+                            [attr.aria-label]="'Ocultar contraseña'" [attr.aria-pressed]="hidePass">
+                            <mat-icon>{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <mat-progress-bar mode="indeterminate" *ngIf="load"></mat-progress-bar>
+                    <div fxLayout="row wrap" fxLayoutAlign="end end" style="margin-bottom: 16px;">
+                        <button color="warn" type="submit" [disabled]="load" mat-raised-button (click)="login()">
+                            Ingresar
+                        </button>
+                    </div>
+                </form>
+               
+                <p style="color: gray;">
+                    ¿Olvidaste tu <a href="#">contraseña</a>?
+                </p>
+            </ng-template>
+        </div>
+    </div>
+
+</div>
