@@ -17,19 +17,20 @@ export class DatabaseService {
     public customers = new BehaviorSubject<any>(null);
     public customers$ = this.customers.asObservable();
 
-    public observations = []
+    public caps = []
     public reasons = []
     public access = []
-    public caps = []
     public duales = []
     public divisions = []
     public nuts = []
     public status = []
+    public observations = []
 
     constructor(
         private http: HttpClient
     ) {
         let customer = JSON.parse(localStorage.getItem('client_tiresoft'))
+        console.log(customer)
         if (customer) {
             this.customerSelect.next(customer);
             //this.getData()
@@ -105,8 +106,16 @@ export class DatabaseService {
         return this.http.post(`${this.url}/api/listar/detalles/inspeccion`, data)
     }
 
+    getInfoDetailInspection(data) {
+        return this.http.post(`${this.url}/api/editar/neumatico/inspeccion`, data)
+    }
+
     saveImage(data) {
         return this.http.post(`${this.url}/api/save/imagen/inspeccion`, data)
+    }
+
+    getImageUrl(url): string {
+        return `${this.url}/${url}`
     }
 
 }

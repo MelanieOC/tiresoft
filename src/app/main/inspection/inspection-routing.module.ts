@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { InspectionFormComponent } from './inspection-form/inspection-form.component';
 import { InspectionComponent } from './inspection.component';
 
 const routes: Routes = [
@@ -9,11 +10,11 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    loadChildren: () => import('./inspection-form/inspection-form.module').then(mod => mod.InspectionFormModule)
+    component: InspectionFormComponent
   },
   {
     path: 'edit/:id',
-    loadChildren: () => import('./inspection-form/inspection-form.module').then(mod => mod.InspectionFormModule)
+    component: InspectionFormComponent
   }
   
 ];

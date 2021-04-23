@@ -17,8 +17,7 @@
 
     </div>
     <div fxLayout="row wrap" fxLayoutAlign="start end">
-        <mat-form-field class="pl-xs pr-xs" style="margin-bottom: 8px;" fxFlex="100" fxFlex.gt-xs="50"
-            fxFlex.gt-md="25">
+        <mat-form-field class="pl-xs pr-xs mb-1" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
             <mat-label>Vehículo</mat-label>
             <mat-select disableOptionCentering required formControlName="tow" required>
                 <mat-option>
@@ -33,8 +32,7 @@
                 Completa este campo.
             </mat-error>
         </mat-form-field>
-        <mat-form-field class="pl-xs pr-xs" style="margin-bottom: 8px;" fxFlex="100" fxFlex.gt-xs="50"
-            fxFlex.gt-md="25">
+        <mat-form-field class="pl-xs pr-xs mb-1" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
             <mat-label>Fecha de Inspección</mat-label>
             <input readonly matInput required formControlName="date" placeholder="dd/mm/aaaa" [matDatepicker]="picker">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -46,8 +44,7 @@
                     date:'dd-MM-yyyy'}}</span>
             </mat-error>
         </mat-form-field>
-        <mat-form-field class="pl-xs pr-xs" style="margin-bottom: 8px;" fxFlex="100" fxFlex.gt-xs="50"
-            fxFlex.gt-md="25">
+        <mat-form-field class="pl-xs pr-xs mb-1" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
             <mat-label>Kilometraje/Horas Actual</mat-label>
             <input matInput required type="number" [min]="0" autocomplete="off" formControlName="mileage">
             <mat-error>
@@ -57,8 +54,7 @@
                     {{vehicle.kilometraje}}</span>
             </mat-error>
         </mat-form-field>
-        <mat-form-field class="pl-xs pr-xs" style="margin-bottom: 8px;" fxFlex="100" fxFlex.gt-xs="50"
-            fxFlex.gt-md="25">
+        <mat-form-field class="pl-xs pr-xs mb-1" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
             <mat-label>Planta</mat-label>
             <mat-select formControlName="plant">
                 <mat-option *ngFor="let p of plants" [value]="p.id_planta">{{p.nombre}}</mat-option>

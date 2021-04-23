@@ -12,11 +12,18 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TableResponsiveModule } from '../table-responsive/table-responsive.module';
+import { TireFormModule } from '../tire-form/tire-form.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { ComponentsModule } from 'src/app/components/components.module';
+
 import { InspectionListDialogComponent } from './inspection-list-dialog/inspection-list-dialog.component';
+import { InspectionFormComponent } from './inspection-form/inspection-form.component';
 
 
 @NgModule({
-  declarations: [InspectionComponent, InspectionListDialogComponent],
+  declarations: [InspectionComponent, InspectionListDialogComponent, InspectionFormComponent],
   imports: [
     CommonModule,
     InspectionRoutingModule,
@@ -27,7 +34,12 @@ import { InspectionListDialogComponent } from './inspection-list-dialog/inspecti
     MatDatepickerModule,
     LazyLoadImageModule,
     NgxMatSelectSearchModule,
-    TableResponsiveModule
+    TableResponsiveModule,
+    MatButtonToggleModule,
+    TireFormModule,
+    MatStepperModule,
+    MatBottomSheetModule,
+    ComponentsModule
   ]
 })
 export class InspectionModule { }

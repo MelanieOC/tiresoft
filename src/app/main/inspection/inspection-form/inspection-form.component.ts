@@ -89,7 +89,7 @@ export class InspectionFormComponent implements OnInit {
       spare_tire: [false]
     })
 
-    this.getData()
+    //this.getData()
   }
 
   getVehicleInfo(res) {
@@ -122,7 +122,7 @@ export class InspectionFormComponent implements OnInit {
 
   }
 
-  openBottom(slot, i, k) {
+  openBottom(slot) {
     let dat = this.inspectForm.value
     this.info = {
       identificador: this.identificador,
@@ -140,67 +140,26 @@ export class InspectionFormComponent implements OnInit {
       this._bottomSheet.open(TireFormComponent, {
         data: {
           id: slot.id_neumatico,
-          value: slot.value,
           info: this.info,
-          row: null,
+          row: slot.value,
           edit: slot.value ? true : false
         }
       }).afterDismissed().pipe(take(1)).subscribe(res => {
         if (res) {
-          if (res.value) {
-            slot.value = res.value
-          }
-
+         
           if (res.inspection) {
             this.identificador = res.inspection.identificador
           }
 
           if (res.row) {
+            slot.value = res.row
             let r = res.row
-            r['i'] = i
-            r['k'] = k
             this.rows = this.rows.concat([r])
             console.log(this.rows)
           }
         }
       })
     }
-  }
-
-  openEditBottom(row) {
-    let dat = this.inspectForm.value
-    this.info = {
-      identificador: this.identificador,
-      codigo: dat.code,
-      vehiculo_id: dat.tow,
-      f_inspeccion: dat.date,
-      km_inspeccion: dat.mileage,
-      planta_id: dat.plant,
-      repuesto: dat.spare_tire ? 1 : 0,
-      portallantas: dat.tire_carrier ? 1 : 0,
-      crated_user: this.auth.user.value.id
-    }
-
-    let slot = this.ubication[row.i][row.k]
-    this._bottomSheet.open(TireFormComponent, {
-      data: {
-        row: row,
-        id: slot.id_neumatico,
-        value: slot.value,
-        info: this.info,
-        edit: true
-      }
-    }).afterDismissed().pipe(take(1)).subscribe(res => {
-      if (res) {
-        if (res.value) {
-          slot.value = res.value
-        }
-        /*
-        if(res.inspection){
-          this.identificador = res.inspection.identificador
-        }*/
-      }
-    })
   }
 
   deleteRow(event) {
@@ -243,104 +202,7 @@ export class InspectionFormComponent implements OnInit {
     this.view = num
   }
 
-  getData() {
-    const formR = new FormData();
-    formR.append('id_accesibilidad', '0');
-    let allData = combineLatest(
-      this.dbs.getNuts().pipe(
-        map(res => {
-          let caps = res['tuercas']
-          return Object.values(caps)
-        })
-      ),
-      this.dbs.getObservation().pipe(
-        map(res => {
-          let caps = res['observaciones']
-          let arr = []
-          Object.keys(caps).forEach(k => {
-            arr.push({
-              name: k,
-              options: caps[k] ? Object.values(caps[k]) : [],
-              multi: !k.includes('rregular'),
-              check: false,
-              value: ''
-            })
-          })
-          return arr
-        })
-      ),
-      this.dbs.getReasons(formR).pipe(
-        map(res => {
-          return res['inaccesibilidad']
-        })
-      ),
-      this.dbs.getTypeCap().pipe(
-        map(res => {
-          let caps = res['tipo_tapa']
-          let arr = []
-          Object.keys(caps).forEach(k => {
-            arr.push({
-              id: k,
-              name: caps[k]
-            })
-          })
-          return arr
-        })
-      ),
-      this.dbs.getDuales().pipe(
-        map(res => {
-          let caps = res['duales']
-          let arr = []
-          Object.keys(caps).forEach(k => {
-            arr.push({
-              id: k,
-              name: caps[k],
-              check: false
-            })
-          })
-          return arr
-        })
-      ),
-      this.dbs.getAccessibility().pipe(
-        map(res => {
-          let caps = res['accesibilidad']
-          let arr = []
-          Object.keys(caps).forEach(k => {
-            arr.push({
-              id: k,
-              name: caps[k]
-            })
-          })
-          return arr
-        })
-      ),
-      this.dbs.getDivision().pipe(
-        map(res => {
-          let caps = res['separacion']
-          return Object.values(caps)
-        })
-      ),
-      this.dbs.getStatus().pipe(
-        map(res => {
-          let caps = res['estado']
-          return Object.values(caps)
-        })
-      )
-    )
-
-    allData.subscribe(res => {
-
-      this.dbs.nuts = res[0]
-      this.dbs.observations = res[1]
-      this.dbs.reasons = res[2]
-      this.dbs.caps = res[3]
-      this.dbs.duales = res[4]
-      this.dbs.access = res[5]
-      this.dbs.divisions = res[6]
-      this.dbs.status = res[7]
-
-    })
-  }
+  
 
 
 }

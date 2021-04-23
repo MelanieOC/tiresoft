@@ -13,12 +13,12 @@
                 Vehículo: {{selectVehicle}}
             </div>
             <div style="max-width: 300px;margin: 20px auto;">
-                <div *ngFor="let row of ubication;let k = index ">
+                <div *ngFor="let row of ubication;let k = index">
                     <div class="row-tire" fxLayout="row wrap" fxLayoutAlign="center start" *ngIf="rowsUbication[k]">
-                        <div *ngFor="let slot of row;let j = index " class="bg-black"
+                        <div *ngFor="let slot of row" class="bg-black"
                             [ngClass]="{'blanck-div': slot.id == -2, 'tire-div':slot.id != -2}">
                             <button class="tire" fxLayout="row wrap" fxLayoutAlign="center center"
-                                [ngClass]="{'press': !!slot.name}" (click)="openBottom(slot,k,j)">
+                                [ngClass]="{'press': !!slot.name}" (click)="openBottom(slot)">
                                 <div>
                                     <mat-icon *ngIf="!!slot.value; else position">check_circle</mat-icon>
                                     <ng-template #position>
@@ -30,8 +30,8 @@
                     </div>
                 </div>
             </div>
-            <app-table-responsive [data]="rows" [columns]="columns" [show]="2" [search]="false" [options]="false"
-                [delete]="true" (onEdit)="openEditBottom($event)" (onDialog)="deleteRow($event)"></app-table-responsive>
+            <!--app-table-responsive [data]="rows" [columns]="columns" [show]="2" [search]="false" [options]="false"
+                [delete]="true" (onEdit)="openEditBottom($event)" (onDialog)="deleteRow($event)"></app-table-responsive-->
         </mat-step>
     </mat-horizontal-stepper>
 

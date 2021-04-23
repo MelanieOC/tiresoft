@@ -53,13 +53,20 @@ body {
   max-height: 100vh !important;
 }
 
+.mb-1 {
+  margin-bottom: 8px;
+}
 @media (min-width: 601px) {
   .pl-xs {
     padding-left: 10px;
   }
-  
+
   .pr-xs {
     padding-right: 10px;
+  }
+
+  .mb-1 {
+    margin-bottom: 15px;
   }
 }
 
