@@ -1,13 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/services/database.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TireFormComponent } from '../../tire-form/tire-form.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatStepper } from '@angular/material/stepper';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import Swal from 'sweetalert2';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailTireComponent } from '../detail-tire/detail-tire.component';
 
 @Component({
   selector: 'app-inspection-form',
@@ -47,34 +50,27 @@ export class InspectionFormComponent implements OnInit {
   dateValidate: any = "2017-11-28"
   kmValidate: any = 0
 
-  rows: any[] = []
-  columns = [
-    { name: 'Pos', slug: 'posicion' },
-    { name: 'Serie neumático', slug: 'num_serie' },
-    { name: 'Marca', slug: 'marca' },
-    { name: 'Modelo', slug: 'modelo' },
-    { name: 'Medida', slug: 'medida' },
-    { name: 'Eje', slug: 'eje' },
-    { name: 'Condición', slug: 'condicion' },//modificar
-    { name: 'Número Reencauche', slug: 'cantidad_reencauche' },
-    { name: 'Empresa Reencauchadora', slug: 'empresa_reencauchadora' },
-    { name: 'Presión', slug: 'presion' }, //modificar más tipo presión
-    { name: 'Tapa de Pitón', slug: 'piton' }, //modificar
-    { name: 'Estado', slug: 'estado' },
-    { name: 'Km de instalación', slug: 'km_instalacion' },
-    { name: 'Km Recorrido', slug: 'km_recorrido' },
-    { name: 'Km Proyectado', slug: 'km_proyectado' },
-    { name: 'Recomendación', slug: 'recomendacion' }
-  ]
+  id: number = null
+  routeChange$: Observable<any>
 
   constructor(
     private fb: FormBuilder,
     private dbs: DatabaseService,
     private auth: AuthService,
-    private _bottomSheet: MatBottomSheet
+    private _bottomSheet: MatBottomSheet,
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+
+    this.routeChange$ = this.activatedRoute.params.pipe(
+      tap(event => {
+        this.id = event ? event.id : null
+      })
+    )
+
     this.select = this.dbs.customerSelect.value
     this.inspectForm = this.fb.group({
       code: [''],
@@ -91,6 +87,7 @@ export class InspectionFormComponent implements OnInit {
 
     //this.getData()
   }
+
 
   getVehicleInfo(res) {
     let sl = res.vehicle
@@ -137,26 +134,37 @@ export class InspectionFormComponent implements OnInit {
     }
 
     if (slot.id_neumatico) {
-      this._bottomSheet.open(TireFormComponent, {
+      this.dialog.open(DetailTireComponent, {
         data: {
           id: slot.id_neumatico,
           info: this.info,
-          row: slot.value,
+          row: slot,
           edit: slot.value ? true : false
-        }
-      }).afterDismissed().pipe(take(1)).subscribe(res => {
+        },
+        width: '600px',
+        disableClose: true,
+        autoFocus: false
+      }).afterClosed().subscribe(res => {
+        console.log(res)
         if (res) {
-         
-          if (res.inspection) {
-            this.identificador = res.inspection.identificador
-          }
-
-          if (res.row) {
-            slot.value = res.row
-            let r = res.row
-            this.rows = this.rows.concat([r])
-            console.log(this.rows)
-          }
+          this._bottomSheet.open(TireFormComponent, {
+            data: {
+              id: slot.id_neumatico,
+              info: this.info,
+              row: slot.value,
+              edit: slot.value ? true : false
+            }
+          }).afterDismissed().pipe(take(1)).subscribe(res => {
+            if (res) {
+              if (res.inspection) {
+                this.identificador = res.inspection.identificador
+              }
+              if (res.row) {
+                slot.value = res.row
+                let r = res.row
+              }
+            }
+          })
         }
       })
     }
@@ -175,16 +183,12 @@ export class InspectionFormComponent implements OnInit {
       heightAuto: false
     }).then((result) => {
       if (result.value) {
-        let slot = this.ubication[event.i][event.k]
         const formC = new FormData()
         formC.append('inspeccion_id', event.id);
-        formC.append('neumatico_id', slot.id_neumatico);
+        formC.append('neumatico_id', event.id_neumatico);
 
         this.dbs.deleteRegister(formC).subscribe(resp => {
-          console.log(resp)
-          let arr = [...this.rows].filter(r => r.id != event.id)
-          this.ubication[event.i][event.k].value = null
-          this.rows = arr
+          event.value = null
         }, error => {
           Swal.fire({
             title: 'Error',
@@ -202,7 +206,33 @@ export class InspectionFormComponent implements OnInit {
     this.view = num
   }
 
-  
+  finishAll() {
+    const allSlots = [...this.ubication].map(ub => {
+      return ub.filter(sl => !!sl.name).filter(sl => !sl.value).length
+    }).reduce((a, b) => a + b, 0)
+    if (allSlots > 0) {
+      Swal.fire({
+        title: '¿Está seguro que desea finalizar la inspección?',
+        text: 'Existen neumáticos sin inspeccionar',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'Cancelar',
+        heightAuto: false
+      }).then((result) => {
+        if (result.value) {
+          this.router.navigate(['main/inspecciones'])
+        } else {
+          return;
+        }
+      });
+    } else {
+      this.router.navigate(['main/inspecciones'])
+    }
 
+    //this.router.navigate(['main/inspecciones'])
+  }
 
 }

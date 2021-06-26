@@ -81,11 +81,18 @@ export class RegisterFormComponent implements OnInit {
           const formV = new FormData()
           formV.append('id_vehiculo', vh);
           this.dbs.getTiresByVehicle(formV).subscribe(resp => {
-            console.log(resp)
             let arr = this.clientList.value
             let sl = arr.find(v => v.id_vehiculo == vh)
             //this.selectVehicle = `${sl.placa} | ${sl.codigo}`
-            this.vehicle = resp['validate'][0]
+            if (resp['validate'] == 'Nuevo') {
+              this.vehicle = {
+                fecha: "2015-01-01",
+                kilometraje: "0"
+              }
+            } else {
+              this.vehicle = resp['validate'][0]
+            }
+
             this.dateValidate = this.vehicle.fecha
             this.kmValidate = Number(this.vehicle.kilometraje)
             this.inspectForm.get('date').reset()
@@ -95,8 +102,8 @@ export class RegisterFormComponent implements OnInit {
             this.inspectForm.get('mileage').enable()
 
             let send = {
-              vehicle:sl,
-              neumaticos:resp['neumaticos']
+              vehicle: sl,
+              neumaticos: resp['neumaticos']
             }
             this.onVehicle.emit(send)
 
@@ -117,6 +124,12 @@ export class RegisterFormComponent implements OnInit {
     return date
   }
 
+  changeSlide(form1, form2) {
+    let a = this.inspectForm.get(form1).value
+    this.inspectForm.get(form2).setValue(a)
+
+  }
+
   dateValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       if (control.value instanceof Date) {
@@ -132,7 +145,7 @@ export class RegisterFormComponent implements OnInit {
     }
   }
 
-  save(){
+  save() {
     this.onSave.emit(this.inspectForm.value)
   }
 

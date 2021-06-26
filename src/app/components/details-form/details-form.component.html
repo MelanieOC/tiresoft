@@ -1,4 +1,4 @@
-<!--form [formGroup]="tireForm">
+<form [formGroup]="tireForm">
     <div fxLayout="row wrap" fxLayoutAlign="space-between start">
 
         <mat-form-field class="pl-xs pr-xs" fxFlex="48" appearance="outline">
@@ -84,6 +84,13 @@
             <mat-label>Medio</mat-label>
             <input matInput type="number" [min]="0" (keydown)="onKeydown($event)" autocomplete="off"
                 formControlName="center">
+            <mat-error>
+                <span *ngIf="rolledForm.get('center').errors?.max">
+                    Es mayor al remanente registrado en la instalación/inspección anterior
+                    ({{validNumber.v_medio}})
+                </span>
+            </mat-error>
+
         </mat-form-field>
         <mat-form-field class="pl-xs pr-xs" fxFlex="30" fxFlex.gt-xs="33">
             <mat-label>Derecho</mat-label>
@@ -103,7 +110,8 @@
 <h4 class="title-form">Duales mal hermanados</h4>
 
 <div class="example-radio-group">
-    <mat-checkbox color="primary" *ngFor="let d of duales" class="example-margin" [(ngModel)]="d.check">
+    <mat-checkbox [color]="d.color" *ngFor="let d of duales" class="example-margin"
+        (change)="changeDuales($event.checked,d)" [disabled]="d.noChange?d.check:false" [(ngModel)]="d.check">
         {{d.name}}
     </mat-checkbox>
 </div>
@@ -128,7 +136,7 @@
             <div *ngIf="d.multi;else multi">
                 <mat-form-field style="width: 100%;margin: 8px 0;" *ngIf="d.check">
                     <mat-select disableOptionCentering placeholder="Seleccione" [(ngModel)]="d.value">
-                        <mat-option *ngFor="let t of d.options;let i = index" [value]="i">{{t}}</mat-option>
+                        <mat-option *ngFor="let t of d.options" [value]="t.value">{{t.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -138,8 +146,8 @@
                         <mat-option>
                             <ngx-mat-select-search [formControl]="bankMultiFilterCtrl"></ngx-mat-select-search>
                         </mat-option>
-                        <mat-option *ngFor="let bank of filtered$ | async" [value]="bank">
-                            {{bank}}
+                        <mat-option *ngFor="let b of filtered$ | async" [value]="b.value">
+                            {{b.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -160,10 +168,10 @@
     </mat-radio-group>
 </div>
 
-<div *ngIf="status==2" style=" margin-bottom: 16px;">
-    <img class="w3-card-4" (click)="photoURL.click()" *ngIf="photo!=null" style="width: 100%;" [src]="photo"
+<div *ngIf="status==2" style=" margin: 0 auto 16px;width: 300px;">
+    <img class="img-div" (click)="photoURL.click()" *ngIf="photo!=null" style="width: 100%;" [src]="photo"
         alt="fotografía">
-    <img class="w3-card-4" (click)="photoURL.click()" *ngIf="photo==null" style="width: 100%;"
+    <img class="img-div" (click)="photoURL.click()" *ngIf="photo==null" style="width: 100%;"
         src="../../../assets/img/imagen_no_disponible.jpg" alt="sin fotografía">
 
     <mat-progress-bar *ngIf="photos?.resizing$.photoURL | async" style="width:100%" mode="indeterminate">
@@ -199,7 +207,7 @@
 </mat-form-field>
 <mat-progress-bar mode="indeterminate" *ngIf="load"></mat-progress-bar>
 <div fxLayout="row wrap" fxLayoutAlign="end end">
-    <button color="warn" style="margin-right: 5px;" mat-stroked-button (click)="close()">
+    <button color="warn" style="margin-right: 5px;" mat-stroked-button>
         Cancelar
     </button>
     <button color="warn" mat-raised-button
@@ -207,4 +215,4 @@
         (click)="save()">
         Guardar
     </button>
-</div-->
+</div>

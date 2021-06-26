@@ -4,7 +4,7 @@
 }
 
 .main-container {
-    height: calc(100vh - 64px);
+    height: calc(100vh - 66px);
 }
 
 .second-toolbar {
@@ -21,7 +21,7 @@
 
 @media (max-width: 599px) {
     .main-container {
-        height: calc(100vh - 56px);
+        height: calc(100vh - 58px);
     }
 
     .second-toolbar {
@@ -42,8 +42,10 @@
     }
 }
 .main__toolbar {
-    background: black;
-    color: white;
+    background: white;
+    border-bottom: 2px solid;
+    /*background: black;
+    color: white;*/
 }
 
 .main__logo {
@@ -57,7 +59,8 @@
 }
 
 .main__logoimage {
-    width: 130px;
+    width: 150px;
+    vertical-align: middle;
 }
 
 .login {
@@ -186,15 +189,17 @@
 }
 
 .user-name {
+    color: #fff;
+    text-shadow: 2px 2px 1px #000;
+    width: calc(100% - 40px);
+}
+
+.text-ellipse {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    max-width: 200px;
-    color: #fff;
-    text-shadow: 2px 2px 1px #000;
 }
-
 .nav-active {
-    color: #3F51B5;
+    color: #3f51b5;
     font-weight: bold;
 }

@@ -5,7 +5,7 @@
             <mat-icon class="dark-icon">menu</mat-icon>
         </button>
         <a class="w3-margin-left w3-margin-right main__logo">
-            <img src="../../assets/img/logotiresoftb.png" class="main__logoimage" alt="logo" />
+            <img src="../../assets/img/LOGO-tiresoft-login.png" class="main__logoimage" alt="logo" />
         </a>
         <span *ngIf="client$ | async as cl" class="name-customer">{{cl.razon_social}}</span>
     </mat-toolbar-row>
@@ -18,10 +18,10 @@
                 <div>
                     <img src="../../assets/img/user.png" alt="">
                 </div>
-                <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+                <div fxLayout="row" fxLayoutAlign="space-between start">
                     <div class="user-name">
-                        <div style="font-size: 14px;">{{user.name}} </div>
-                        <div style="font-size: 12px;"> {{user.email}}</div>
+                        <div style="font-size: 14px;" class="text-ellipse">{{user.name}} </div>
+                        <div style="font-size: 12px;" class="text-ellipse"> {{user.email}}</div>
                     </div>
                     <div>
                         <button style="color: white;" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
@@ -41,7 +41,7 @@
                 </div>
                 <div class="menu">
                     <div *ngIf="client$ | async else select">
-                        <button mat-button class="menu__button" routerLink="home" >
+                        <button mat-button class="menu__button" routerLink="home">
                             <mat-icon class="menu__icon">home</mat-icon>
                             Inicio
                         </button>

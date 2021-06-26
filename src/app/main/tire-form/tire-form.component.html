@@ -5,7 +5,6 @@
     Inspección de neumático
 </h2>
 <hr>
-<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
 <form [formGroup]="tireForm">
     <div fxLayout="row wrap" fxLayoutAlign="space-between start">
 
@@ -35,8 +34,8 @@
         </mat-form-field>
         <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33">
             <mat-label>Presión actual</mat-label>
-            <input matInput required type="number" autocomplete="off" (keydown)="onKeydown($event)" [min]="0"
-                formControlName="pressure">
+            <input matInput required autocomplete="off" type="number" [min]="0" [max]="999" formControlName="pressure"
+                (keypress)="onlyNumber($event,tireForm.get('pressure').value,3)">
         </mat-form-field>
 
     </div>
@@ -78,8 +77,8 @@
     <div fxLayout="row wrap" fxLayoutAlign="space-between start">
         <mat-form-field class="pl-xs pr-xs" fxFlex="30" fxFlex.gt-xs="33">
             <mat-label>Izquierdo</mat-label>
-            <input matInput required type="number" [min]="0" (keydown)="onKeydown($event)" autocomplete="off"
-                formControlName="left">
+            <input matInput required type="number" autocomplete="off" formControlName="left"
+                (keypress)="onlyNumber($event,rolledForm.get('left').value,2)">
             <mat-error>
                 <span *ngIf="rolledForm.get('left').errors?.required">Campo requerido</span>
                 <span *ngIf="rolledForm.get('left').errors?.max">
@@ -90,8 +89,8 @@
         </mat-form-field>
         <mat-form-field class="pl-xs pr-xs" fxFlex="30" fxFlex.gt-xs="33">
             <mat-label>Medio</mat-label>
-            <input matInput type="number" [min]="0" (keydown)="onKeydown($event)" autocomplete="off"
-                formControlName="center">
+            <input matInput type="number" autocomplete="off" formControlName="center"
+                (keypress)="onlyNumber($event,rolledForm.get('center').value,2)">
             <mat-error>
                 <span *ngIf="rolledForm.get('center').errors?.max">
                     Es mayor al remanente registrado en la instalación/inspección anterior
@@ -102,8 +101,8 @@
         </mat-form-field>
         <mat-form-field class="pl-xs pr-xs" fxFlex="30" fxFlex.gt-xs="33">
             <mat-label>Derecho</mat-label>
-            <input matInput required type="number" [min]="0" (keydown)="onKeydown($event)" autocomplete="off"
-                formControlName="right">
+            <input matInput required type="number" autocomplete="off" formControlName="right"
+                (keypress)="onlyNumber($event,rolledForm.get('right').value,2)">
             <mat-error>
                 <span *ngIf="rolledForm.get('right').errors?.required">Campo requerido</span>
                 <span *ngIf="rolledForm.get('right').errors?.max">
@@ -152,7 +151,8 @@
                 <mat-form-field style="width: 100%;margin: 8px 0;" *ngIf="d.check">
                     <mat-select [(ngModel)]="d.value" placeholder="Seleccione" [multiple]="true" #multiSelect>
                         <mat-option>
-                            <ngx-mat-select-search [formControl]="bankMultiFilterCtrl"></ngx-mat-select-search>
+                            <ngx-mat-select-search placeholderLabel="Buscar..." noEntriesFoundLabel="'Sin Resultados'"
+                                [formControl]="bankMultiFilterCtrl"></ngx-mat-select-search>
                         </mat-option>
                         <mat-option *ngFor="let b of filtered$ | async" [value]="b.value">
                             {{b.name}}
@@ -176,7 +176,7 @@
     </mat-radio-group>
 </div>
 
-<div *ngIf="status==2" style=" margin: 0 auto 16px;width: 300px;">
+<div *ngIf="status==2" style=" margin: 0 auto 16px;width: 100%;max-width:300px">
     <img class="img-div" (click)="photoURL.click()" *ngIf="photo!=null" style="width: 100%;" [src]="photo"
         alt="fotografía">
     <img class="img-div" (click)="photoURL.click()" *ngIf="photo==null" style="width: 100%;"
@@ -200,12 +200,11 @@
         </mat-form-field>
         <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
             <mat-label>Cantidad de tuercas</mat-label>
-            <input matInput type="number" (keydown)="onKeydown($event)" [min]="0" autocomplete="off"
-                formControlName="amount">
+            <input matInput autocomplete="off" type="number" formControlName="amount"
+                (keypress)="onlyNumber($event,nutsForm.get('amount').value,2)">
         </mat-form-field>
     </div>
 </form>
-
 
 <h4 class="title-form">Recomendación</h4>
 

@@ -65,12 +65,14 @@
     <div fxLayout="row wrap" fxLayoutAlign="start center">
         <div class="pl-xs pr-xs" style="margin-bottom: 10px;" fxFlex="100" fxFlex.gt-xs="50">
 
-            <mat-slide-toggle class="example-margin" formControlName="spare_tire" color="warn">
+            <mat-slide-toggle class="example-margin" (change)="changeSlide('spare_tire','tire_carrier')"
+                formControlName="spare_tire" color="warn">
                 Unidad Tiene Llanta de Repuesto
             </mat-slide-toggle>
         </div>
         <div class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
-            <mat-slide-toggle class="example-margin" formControlName="tire_carrier" color="warn">
+            <mat-slide-toggle class="example-margin" (change)="changeSlide('tire_carrier', 'spare_tire')"
+                formControlName="tire_carrier" color="warn">
                 Unidad Tiene Porta Llanta
             </mat-slide-toggle>
         </div>

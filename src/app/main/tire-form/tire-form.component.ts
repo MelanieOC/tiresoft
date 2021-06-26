@@ -64,6 +64,8 @@ export class TireFormComponent implements OnInit {
   vehicle: any = null
 
   infoSave: any = null
+  imgResultBeforeCompress: string;
+  imgResultAfterCompress: string;
 
   constructor(
     private fb: FormBuilder,
@@ -74,34 +76,32 @@ export class TireFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data)
-
     this.getAllData()
 
     this.tireForm = this.fb.group({
       position: ['', Validators.required],
       serie: ['', Validators.required],
       ejes: ['', Validators.required],
-      pressure: [this.data.edit ? this.data.row.presion : '', Validators.required],
+      pressure: [this.data.edit ? this.data.row.presion : null, Validators.required],
       type: ['PSI']
     })
 
     this.capForm = this.fb.group({
-      type: [this.data.edit ? this.data.row.valvula : '', Validators.required],
+      type: [this.data.edit ? this.data.row.valvula : null, Validators.required],
       accessibility: [this.data.edit ? Number(this.data.row.accesibilidad) : 1, Validators.required],
-      reason: [this.data.edit ? this.data.row.motivo_inaccesibilidad : '']
+      reason: [this.data.edit ? this.data.row.motivo_inaccesibilidad : null]
 
     })
 
     this.rolledForm = this.fb.group({
-      right: [this.data.edit ? Number(this.data.row.r_derecho) : '', Validators.required],
-      left: [this.data.edit ? Number(this.data.row.r_izquierdo) : '', Validators.required],
-      center: [this.data.edit ? this.data.row.r_medio ? Number(this.data.row.r_medio) : '' : ''],
+      right: [this.data.edit ? Number(this.data.row.r_derecho) : null, Validators.required],
+      left: [this.data.edit ? Number(this.data.row.r_izquierdo) : null, Validators.required],
+      center: [this.data.edit ? this.data.row.r_medio ? Number(this.data.row.r_medio) : null : null],
 
     })
 
     this.nutsForm = this.fb.group({
-      status: [this.data.edit ? this.data.row.tuercaestado : '', Validators.required],
+      status: [this.data.edit ? this.data.row.tuercaestado : null, Validators.required],
       amount: [this.data.edit ? this.data.row.tuercacantidad ? Number(this.data.row.tuercacantidad) : '' : '']
 
     })
@@ -113,9 +113,7 @@ export class TireFormComponent implements OnInit {
       this.observation.setValue(this.data.row.recomendacion)
       let sep = this.data.row.sep_duales.split('-')
       this.dial = sep[sep.length - 1].trim()
-      if (this.data.row.imagen_url) {
-        this.photo = this.dbs.getImageUrl(this.data.row.imagen_url)
-      }
+
       this.getInfoData()
     } else {
       this.vehicle = this.data.info.vehiculo_id
@@ -202,13 +200,11 @@ export class TireFormComponent implements OnInit {
     this.photos.resizing$[formControlName].next(true);
 
     this.ng2ImgMax.resizeImage(image[0], 10000, 426)
-      .pipe(
-        take(1)
-      ).subscribe(
+      .pipe(take(1)).subscribe(
         result => {
-          this.photos.data[formControlName] = new File([result], formControlName + result.name.match(/\..*$/));
-          this.photoFile = result
-          reader.readAsDataURL(image[0]);
+          this.photos.data[formControlName] = new File([result], result.name);
+          this.photoFile = new File([result], result.name);
+          reader.readAsDataURL(result);
           reader.onload = (_event) => {
             this.photo = reader.result;
             this.photos.resizing$[formControlName].next(false);
@@ -225,10 +221,21 @@ export class TireFormComponent implements OnInit {
 
         }
       );
+
   }
 
   close() {
     this._bottomSheetRef.dismiss();
+  }
+
+  onlyTwoNumbers(e) {
+    const initalValue = this.tireForm.get('pressure').value;
+
+    if (initalValue) {
+      if (initalValue.length > 2) {
+        e.stopPropagation();
+      }
+    }
   }
 
   save() {
@@ -251,26 +258,51 @@ export class TireFormComponent implements OnInit {
     formData.append('presion', this.tireForm.get('pressure').value);
     formData.append('presion_tipo', this.tireForm.get('type').value);
     formData.append('estado', this.dbs.status[this.status]);
-    formData.append('cocada', '');
+    formData.append('cocada', ' ');
     formData.append('valvula', this.capForm.get('type').value);
-    formData.append('malogrado', '');
-    formData.append('motivo_inaccesibilidad', this.capForm.get('reason').value);
+    formData.append('malogrado', ' ');
+    formData.append('sep_duales', this.dial);
     formData.append('accesibilidad', this.capForm.get('accessibility').value);
     formData.append('r_exterior', this.rolledForm.get('left').value);
-    formData.append('r_medio', this.rolledForm.get('center').value ? this.rolledForm.get('center').value : 0);
     formData.append('r_interior', this.rolledForm.get('right').value);
     formData.append('neumatico_id', this.data.id);
     formData.append('resultado', duals.length ? duals.join(',') : '');
-    formData.append('otros', obs.length ? obs.join(',') : '');
-    formData.append('sep_duales', this.dial);
-    formData.append('des_irregular', obs1.check ? obs1.value.join(', ') : '');
-    formData.append('para_reparar', obs2.check ? obs2.value : '');
-    formData.append('fallas_flanco', obs3.check ? obs3.value : '');
     formData.append('tuerca_estado', this.nutsForm.get('status').value);
-    formData.append('tuerca_cantidad', this.nutsForm.get('amount').value);
     formData.append('recomendacion', this.observation.value);
-
     formData.append('cliente_id', this.dbs.customerSelect.value.id_cliente);
+    formData.append('motivo_inaccesibilidad', this.capForm.get('reason').value ? this.capForm.get('reason').value : ' ');
+
+    if (this.rolledForm.get('center').value) {
+      formData.append('r_medio', this.rolledForm.get('center').value);
+    }
+
+    if (obs.length) {
+      formData.append('otros', obs.join(','));
+    }
+
+    if (obs1.check) {
+      if (obs1.value) {
+        formData.append('des_irregular', obs1.value.join(', '));
+      }
+
+    }
+
+    if (obs2.check) {
+      if (obs2.value) {
+        formData.append('para_reparar', obs2.value);
+      }
+    }
+
+    if (obs3.check) {
+      if (obs3.value) {
+        formData.append('fallas_flanco', obs3.value);
+      }
+    }
+
+    if (this.nutsForm.get('amount').value) {
+      formData.append('tuerca_cantidad', this.nutsForm.get('amount').value);
+    }
+
 
     if (this.data.edit) {
       formData.append('updated_at', this.modifiedDate(today));
@@ -280,23 +312,37 @@ export class TireFormComponent implements OnInit {
       formData.append('imagen_ruta', this.photoFile ? this.photoFile : this.data.row.imagen_url ? this.data.row.imagen_url : '');
 
       this.dbs.editRegister(formData).subscribe((response: any) => {
-        console.log(response)
+        if (response.inspeccion) {
+          let r = response.inspeccion.find(ip => ip.posicion == this.tireForm.get('position').value)
 
-        let r = response.inspeccion[response.inspeccion.length - 1]
-        r['condicion'] = r.nuevo_or_reencauchado == 1 ? 'Nuevo' : 'Reencauchado'
-        r['presion'] = r.presion + ' ' + r.tipo_presion
-        r['piton'] = this.caps.find(el => el.id == r.valvula).name
-        r['costo_kilometro'] = response.costo_kilometro.id
+          r['condicion'] = r.nuevo_or_reencauchado == 1 ? 'Nuevo' : 'Reencauchado'
+          r['presion'] = r.presion + ' ' + r.tipo_presion
+          r['piton'] = this.caps.find(el => el.id == r.valvula).name
+          r['costo_kilometro'] = response.costo_kilometro.id
 
-        this.load = false
-        this._bottomSheetRef.dismiss({
-          inspection: response,
-          row: r
-        });
+          this.load = false
+          this.observs = this.observs.map(obs => {
+            obs.check = false
+            obs.value = obs.multi?null:[]
+            return obs
+          })
+
+          this._bottomSheetRef.dismiss({
+            inspection: response,
+            row: r
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un problema',
+            icon: 'error',
+            heightAuto: false
+          })
+        }
       }, error => {
         Swal.fire({
           title: 'Error',
-          text: 'Problema al iniciar sesión, usuario o contraseña incorrecto',
+          text: 'Ocurrió un problema',
           icon: 'error',
           heightAuto: false
         })
@@ -311,22 +357,38 @@ export class TireFormComponent implements OnInit {
 
       this.dbs.saveRegister(formData).subscribe((response: any) => {
         this.load = false
-        let r = response.inspeccion[response.inspeccion.length - 1]
-        r['condicion'] = r.nuevo_or_reencauchado == 1 ? 'Nuevo' : 'Reencauchado'
-        r['presionS'] = r.presion + ' ' + r.tipo_presion
-        r['piton'] = this.caps.find(el => el.id == r.valvula).name
-        r['costo_kilometro'] = response.costo_kilometro.id
-        r['inspeccion_id'] = r.id
-        r['imagen_url'] = r.neumaticoimgruta1
+        if (response.inspeccion) {
+          let r = response.inspeccion[response.inspeccion.length - 1]
+          r['condicion'] = r.nuevo_or_reencauchado == 1 ? 'Nuevo' : 'Reencauchado'
+          r['presionS'] = r.presion + ' ' + r.tipo_presion
+          r['piton'] = this.caps.find(el => el.id == r.valvula).name
+          r['costo_kilometro'] = response.costo_kilometro.id
+          r['inspeccion_id'] = r.id
+          r['imagen_url'] = r.neumaticoimgruta1
 
-        this._bottomSheetRef.dismiss({
-          inspection: response,
-          row: r
-        });
+          this.observs = this.observs.map(obs => {
+            obs.check = false
+            obs.value = obs.multi?null:[]
+            return obs
+          })
+
+          this._bottomSheetRef.dismiss({
+            inspection: response,
+            row: r
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un problema',
+            icon: 'error',
+            heightAuto: false
+          })
+        }
       }, error => {
+        console.log(error)
         Swal.fire({
           title: 'Error',
-          text: 'Problema al iniciar sesión, usuario o contraseña incorrecto',
+          text: 'Ocurrió un problema',
           icon: 'error',
           heightAuto: false
         })
@@ -338,32 +400,31 @@ export class TireFormComponent implements OnInit {
     return `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`
   }
 
-  onKeydown(event) {
-    let permit =
-      event.keyCode === 8 ||
-      event.keyCode === 46 ||
-      event.keyCode === 37 ||
-      event.keyCode === 39;
-    return permit ? true : !isNaN(Number(event.key));
-  }
-
   getAllData() {
     let dualSelec = []
     let obserSelect = []
+    this.observs = []
+    this.caps = []
+    this.duales = []
     if (this.data.edit) {
-      this.status = this.dbs.status.findIndex(st => st == this.data.row.estado)
-
-      dualSelec = this.data.row.d_hermanados.split(',').map(el => el.trim())
+      this.status = this.dbs.status.findIndex(st => this.replaceStrangeCaracters(st) == this.replaceStrangeCaracters(this.data.row.estado))
+      if (this.status == 2) {
+        if (this.data.row.imagen_url) {
+          this.photo = this.dbs.getImageUrl(this.data.row.imagen_url)
+        }
+      }
+      dualSelec = this.data.row.d_hermanados ? this.data.row.d_hermanados.split(',').map(el => el.trim()) : []
       obserSelect = this.data.row.observaciones ? this.data.row.observaciones.split(',').map(el => el.trim()) : []
     }
 
     this.caps = this.dbs.caps
     this.duales = [...this.dbs.duales].map(dt => {
-      dt.noChange = dt.name.includes('plica')
+      dt['noChange'] = dt.name.includes('plica')
       dt.check = this.data.edit ? dualSelec.includes(dt.name) : dt.name.includes('plica')
-      dt.color = dt.name.includes('plica') ? 'warn' : 'primary'
+      dt['color'] = dt.name.includes('plica') ? 'warn' : 'primary'
       return dt
     })
+
     this.observs = [...this.dbs.observations].map(ob => {
       ob.check = this.data.edit ? obserSelect.includes(ob.name) : false
       if (this.data.edit) {
@@ -382,5 +443,38 @@ export class TireFormComponent implements OnInit {
 
     this.clientList.next(this.observs.filter(el => !el.multi)[0].options)
 
+  }
+
+  replaceStrangeCaracters(strTHML) {
+    return strTHML.replace(/á/gi, "a")
+      .replace(/é/gi, "e")
+      .replace(/í/gi, "i")
+      .replace(/ó/gi, "o")
+      .replace(/ú/gi, "u")
+      //.replace(/ñ/gi, "&Ntilde;")
+      .replace(/°/gi, " ")
+      .replace(/\?/gi, "")
+      .replace(/¿/gi, "")
+      .replace(/\!/gi, "")
+      .replace(/¡/gi, "")
+      .replace(/¨/gi, "")
+      .replace(/®/gi, "")
+      .replace(/@/gi, "")
+      .replace(/\$/gi, "")
+      .replace(/%/gi, "")
+      .replace(/Ü/gi, "u");
+  }
+
+  onlyNumber(e, input, max) {
+    let key = e.keyCode || e.which;
+    let character = String.fromCharCode(key);
+    let inputValue;
+    if (input) {
+      inputValue = input + character
+    } else {
+      inputValue = character
+    }
+    let regex = /\(?(^[0-9]*$)/;
+    return regex.test((inputValue)) && inputValue.length <= max
   }
 }

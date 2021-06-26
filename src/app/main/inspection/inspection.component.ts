@@ -64,7 +64,6 @@ export class InspectionComponent implements OnInit {
 
   }
 
-
   optionsDialog(res) {
     this.dialog.open(InspectionListDialogComponent, {
       data: {
@@ -73,4 +72,5 @@ export class InspectionComponent implements OnInit {
       }
     })
   }
+
 }

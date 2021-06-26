@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { DatabaseService } from 'src/app/services/database.service';
+
 
 @Component({
   selector: 'app-home',
@@ -15,4 +16,5 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+ 
 }

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material/material.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
-
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -12,7 +12,7 @@ import { HomeComponent } from './home.component';
     CommonModule,
     HomeRoutingModule,
     MaterialModule,
-    
+    Ng2ImgMaxModule
   ]
 })
 export class HomeModule { }

@@ -41,7 +41,6 @@ export class MainComponent implements OnInit {
       filter(event => event instanceof NavigationEnd),
       tap(event => {
         this.url = event.url;
-        console.log(this.url)
         if (this.isOver()) {
           //this.userService.openedMenu = false
           this.sidemenu.close();
@@ -182,6 +181,8 @@ export class MainComponent implements OnInit {
       this.dbs.access = res[5]
       this.dbs.divisions = res[6]
       this.dbs.status = res[7]
+
+      this.dbs.loadAll = true
     })
   }
 }

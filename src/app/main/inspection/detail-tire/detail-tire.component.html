@@ -1,0 +1,60 @@
+<div mat-dialog-title>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h4 style="font-size: 15px;margin-bottom: 0px;">
+            Detalle Neumático
+        </h4>
+        <button mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+<mat-dialog-content>
+    <form [formGroup]="detailForm">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>Posición</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="position">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>ID Neumático</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="tire">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>Ubicación</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="ubication">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>Número serie</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="serie">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>Fecha Instalación</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="date">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>KM/HR Instalación</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="millage">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>Modelo</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="model">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>Marca</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="brand">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33" appearance="fill">
+                <mat-label>Medida</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="measure">
+            </mat-form-field>
+        </div>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-stroked-button type="button" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button [color]="data.edit?'primary':'warn'" type="button" (click)="goInspection()">
+        {{data.edit?'Ver Inspección':'Inspeccionar'}}
+    </button>
+</mat-dialog-actions>

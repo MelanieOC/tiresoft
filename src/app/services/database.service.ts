@@ -26,11 +26,13 @@ export class DatabaseService {
     public status = []
     public observations = []
 
+    public loadAll: boolean = false
+
+
     constructor(
         private http: HttpClient
     ) {
         let customer = JSON.parse(localStorage.getItem('client_tiresoft'))
-        console.log(customer)
         if (customer) {
             this.customerSelect.next(customer);
             //this.getData()
@@ -114,8 +116,30 @@ export class DatabaseService {
         return this.http.post(`${this.url}/api/save/imagen/inspeccion`, data)
     }
 
+    getDetail(data) {
+        return this.http.post(`${this.url}/api/detalle/neumatico/inspeccion`, data)
+    }
+
     getImageUrl(url): string {
         return `${this.url}/${url}`
     }
 
+    getLogo(base64Image) {
+        const body = {
+            "requests": [
+                {
+                    "image": {
+                        "content": base64Image
+                    },
+                    "features": [
+                        {
+                            "type": "DOCUMENT_TEXT_DETECTION",
+                            "maxResults": 1
+                        }
+                    ]
+                }
+            ]
+        }
+        return this.http.post('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBKgWFLtt9w6BQfs2l5FSJ9pp_XWWDsHcw', body);
+    }
 }

@@ -20,10 +20,11 @@ import { ComponentsModule } from 'src/app/components/components.module';
 
 import { InspectionListDialogComponent } from './inspection-list-dialog/inspection-list-dialog.component';
 import { InspectionFormComponent } from './inspection-form/inspection-form.component';
+import { DetailTireComponent } from './detail-tire/detail-tire.component';
 
 
 @NgModule({
-  declarations: [InspectionComponent, InspectionListDialogComponent, InspectionFormComponent],
+  declarations: [InspectionComponent, InspectionListDialogComponent, InspectionFormComponent, DetailTireComponent],
   imports: [
     CommonModule,
     InspectionRoutingModule,
