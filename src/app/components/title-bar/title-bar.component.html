@@ -1,0 +1,11 @@
+<mat-toolbar class="ts-toolbar">
+    <span>{{title}}</span>
+    <span fxFlex></span>
+    <button mat-button fxHide fxShow.gt-sm (click)="goBack()">
+        <mat-icon style="vertical-align: middle;margin-right: 5px;">keyboard_backspace</mat-icon>
+        Regresar
+    </button>
+    <button mat-icon-button fxShow fxHide.gt-sm (click)="goBack()">
+        <mat-icon style="vertical-align: middle;margin-right: 5px;">keyboard_backspace</mat-icon>
+    </button>
+</mat-toolbar>

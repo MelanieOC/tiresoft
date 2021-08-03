@@ -1,0 +1,17 @@
+<mat-toolbar class="ts-toolbar">
+    <span>Tipo de Cambio</span>
+</mat-toolbar>
+<div class="sunat" *ngIf="cambio" fxLayout="row" fxLayoutAlign="space-around center">
+    <img src="../../../../assets/img/sunat_web.png" width="100px" alt="">
+    <div><b>Compra: </b> <span>S/. {{cambio.compra}}</span></div>
+    <div><b>Venta: </b> <span> S/. {{cambio.venta}}</span></div>
+</div>
+<hr *ngIf="cambio">
+<div class="ts-container">
+    <button mat-raised-button color="primary" (click)="openDialog()" style="margin-bottom: 25px;">
+        <mat-icon style="vertical-align: middle;margin-right: 5px;">add_circle_outline</mat-icon> Nuevo
+    </button>
+    <app-table-responsive [data]="allData" [columns]="columns" [search]="false" [paginate]="false">
+    </app-table-responsive>
+
+</div>

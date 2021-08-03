@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: 'https://tiresoft-wprogressive.lab-elsol.com'
+  url: 'https://tiresoft-server.pruebasgt.com'
 };
 
 /*

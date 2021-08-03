@@ -1,0 +1,57 @@
+<div *ngIf="search" fxLayout="row wrap" fxLayoutAlign="start center">
+    <ng-content select="[slot=new]"></ng-content>
+    <mat-form-field color="primary" appearance="outline" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-sm="40">
+        <mat-label>Buscar</mat-label>
+        <mat-icon matPrefix class="w3-margin-right">search</mat-icon>
+        <input matInput type="text" (keyup)="applyFilter($event)" placeholder="Escriba..." autocomplete="off" />
+    </mat-form-field>
+</div>
+<ng-container *ngIf="init$ | async"></ng-container>
+<div class="mat-elevation-z1" style="background-color: white;">
+    <div class="detail-container">
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+            <ng-container matColumnDef="options">
+                <th mat-header-cell *matHeaderCellDef style="color: white;text-align: center;">
+                    {{optionColum ? optionColum.name : 'Opciones'}}
+                </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"
+                    [ngStyle]="{'min-width.px': optionColum.width || 40}">
+                    <button class="mini-button" *ngFor="let act of actionList" (click)="edit($event,element,act.id)">
+                        <mat-icon>{{act.icon}}</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="{{column.slug}}" *ngFor="let column of colsShow">
+                <th mat-header-cell *matHeaderCellDef style="color: white;" mat-sort-header> {{column.name}} </th>
+                <td mat-cell *matCellDef="let element" [ngStyle]="{'min-width.px': column.width || 50}"
+                    style="padding-right: 10px;">
+                    {{element[column.slug]}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length">
+                    <div class="example-element-detail"
+                        [@detailExpand]="row == expandedElement ? 'expanded' : 'collapsed'">
+                        <div class="example-element-diagram" *ngIf="!isDesktop" style="padding: 10px 0;">
+                            <div class="list" *ngFor="let column of cols">
+                                <span class="list__title">{{column.name}}: </span>{{row[column.slug]}}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                style="text-align-last: center;background-color: rgb(51, 51, 51);color: white;">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" class="example-element-row"
+                [class.example-expanded-row]="expandedElement === row" (click)="expand(row)">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </table>
+    </div>
+    <div *ngIf="dataSource.data.length == 0" class="noData">
+        No hay datos disponibles en la tabla
+    </div>
+    <mat-paginator *ngIf="paginate" #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

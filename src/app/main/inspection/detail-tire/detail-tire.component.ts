@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatabaseService } from 'src/app/services/database.service';
 import { formatDate, formatNumber } from '@angular/common';
+import { InspectionService } from 'src/app/services/inspection.service';
 
 @Component({
   selector: 'app-detail-tire',
@@ -17,7 +18,8 @@ export class DetailTireComponent implements OnInit {
     public dialogRef: MatDialogRef<DetailTireComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
-    private dbs: DatabaseService
+    private dbs: DatabaseService,
+    private inspectionService: InspectionService
   ) { }
 
   ngOnInit(): void {
@@ -37,7 +39,7 @@ export class DetailTireComponent implements OnInit {
     formR.append('neumatico_id', this.data.id);
     formR.append('cliente_id', this.dbs.customerSelect.value.id_cliente);
 
-    this.dbs.getDetail(formR).subscribe(res => {
+    this.inspectionService.getDetail(formR).subscribe(res => {
       const data = res['data'][0]
       const det = {
         position: this.data.row.name,

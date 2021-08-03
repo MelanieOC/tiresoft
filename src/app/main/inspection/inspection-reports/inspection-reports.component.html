@@ -1,0 +1,8 @@
+<mat-toolbar class="ts-toolbar">
+    <span>Reporte de Inspecciones</span>
+</mat-toolbar>
+<div class="ts-container ts-spaicing">
+    <app-table-responsive [data]="allData" [columns]="columns" [search]="true" [paginate]="true" [actionList]="actions"
+        (onAction)="getAction($event)">
+    </app-table-responsive>
+</div>

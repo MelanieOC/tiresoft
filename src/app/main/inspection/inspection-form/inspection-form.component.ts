@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map, take, tap } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/services/database.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { TireFormComponent } from '../../tire-form/tire-form.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatStepper } from '@angular/material/stepper';
 import { combineLatest, Observable } from 'rxjs';
@@ -11,6 +10,8 @@ import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailTireComponent } from '../detail-tire/detail-tire.component';
+import { InspectionTireFormComponent } from 'src/app/components/inspection-tire-form/inspection-tire-form.component';
+import { InspectionService } from 'src/app/services/inspection.service';
 
 @Component({
   selector: 'app-inspection-form',
@@ -22,8 +23,6 @@ export class InspectionFormComponent implements OnInit {
   inspectForm: FormGroup
 
   @ViewChild('stepper') private myStepper: MatStepper;
-
-  view = 1
 
   select = null
   selectVehicle = null
@@ -56,6 +55,7 @@ export class InspectionFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dbs: DatabaseService,
+    private inspectionService: InspectionService,
     private auth: AuthService,
     private _bottomSheet: MatBottomSheet,
     private activatedRoute: ActivatedRoute,
@@ -147,7 +147,7 @@ export class InspectionFormComponent implements OnInit {
       }).afterClosed().subscribe(res => {
         console.log(res)
         if (res) {
-          this._bottomSheet.open(TireFormComponent, {
+          this._bottomSheet.open(InspectionTireFormComponent, {
             data: {
               id: slot.id_neumatico,
               info: this.info,
@@ -187,7 +187,7 @@ export class InspectionFormComponent implements OnInit {
         formC.append('inspeccion_id', event.id);
         formC.append('neumatico_id', event.id_neumatico);
 
-        this.dbs.deleteRegister(formC).subscribe(resp => {
+        this.inspectionService.deleteRegister(formC).subscribe(resp => {
           event.value = null
         }, error => {
           Swal.fire({
@@ -200,10 +200,6 @@ export class InspectionFormComponent implements OnInit {
       }
     })
 
-  }
-
-  viewChange(num) {
-    this.view = num
   }
 
   finishAll() {

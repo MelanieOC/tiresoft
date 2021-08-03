@@ -1,87 +1,205 @@
-<mat-toolbar class="main__toolbar">
-
-    <mat-toolbar-row>
-        <button *ngIf="isOver()" mat-icon-button (click)="toggleSideMenu()">
-            <mat-icon class="dark-icon">menu</mat-icon>
-        </button>
-        <a class="w3-margin-left w3-margin-right main__logo">
-            <img src="../../assets/img/LOGO-tiresoft-login.png" class="main__logoimage" alt="logo" />
-        </a>
-        <span *ngIf="client$ | async as cl" class="name-customer">{{cl.razon_social}}</span>
-    </mat-toolbar-row>
-</mat-toolbar>
 <ng-container *ngIf="routeChange$ | async"></ng-container>
-<mat-sidenav-container class="main-container">
-    <mat-sidenav [opened]="!isOver()" [mode]="isOver() ? 'over' : 'side'" #sideMenu>
-        <div class="sider">
-            <div class="user-div">
-                <div>
-                    <img src="../../assets/img/user.png" alt="">
-                </div>
-                <div fxLayout="row" fxLayoutAlign="space-between start">
-                    <div class="user-name">
-                        <div style="font-size: 14px;" class="text-ellipse">{{user.name}} </div>
-                        <div style="font-size: 12px;" class="text-ellipse"> {{user.email}}</div>
-                    </div>
-                    <div>
-                        <button style="color: white;" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                            <mat-icon>arrow_drop_down</mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="logout()">
-                                <span>Cerrar Sesión</span>
-                            </button>
-                        </mat-menu>
-                    </div>
-                </div>
+<mat-sidenav-container style="min-height: 100vh;">
+    <mat-sidenav [opened]="!isOver()" [mode]="isOver() ? 'over' : 'side'" class="sidebar-panel" #sideMenu>
+        <div class="user-div">
+            <div fxLayout="row" fxLayoutAlign="end start">
+                <button style="color: white;" (click)="logout()" mat-icon-button>
+                    <mat-icon>exit_to_app</mat-icon>
+                </button>
             </div>
-            <div>
-                <div class="menu-header">
-                    Menu principal
-                </div>
-                <div class="menu">
-                    <div *ngIf="client$ | async else select">
-                        <button mat-button class="menu__button" routerLink="home">
-                            <mat-icon class="menu__icon">home</mat-icon>
-                            Inicio
-                        </button>
-                        <mat-expansion-panel style="box-shadow:none; border-radius:0px 0px 0px 0px" class="w3-block"
-                            [ngClass]="{'ms-expansion-panel-menu':confiOpenedFlag}" (opened)="confiOpened()"
-                            (closed)="confiClosed()">
+            <div class="user-name">
+                <div style="font-size: 16px;" class="text-ellipse">{{userName.name}} </div>
+                <div style="font-size: 13px;" class="text-ellipse"> {{userName.email}}</div>
+            </div>
+        </div>
+        <div>
+            <div class="menu">
+                <div *ngIf="client$ | async else select">
+                    <mat-nav-list style="width: 100%" class="admin">
+                        <a mat-list-item routerLink="home" routerLinkActive="active">
+                            <mat-icon mat-list-icon class="mat-icon-menu">home</mat-icon>
+                            <span class="mat-item-list-span">
+                                Inicio
+                            </span>
+                        </a>
+                    </mat-nav-list>
+                    <mat-accordion>
+                        <mat-expansion-panel *ngFor="let item of menuItems">
                             <mat-expansion-panel-header>
-                                <mat-panel-title style="font-weight:500" routerLinkActive="nav-active">
-                                    <mat-icon class="menu__icon">widgets</mat-icon> Inspección
+                                <mat-panel-title>
+                                    <mat-nav-list>
+                                        <a mat-list-item [ngClass]="{'nav-active': item.state == urlActive}">
+                                            <mat-icon mat-list-icon class="mat-icon-menu">{{item.icon}}</mat-icon>
+                                            <span class="mat-item-list-span">
+                                                {{item.name}}
+                                            </span>
+                                        </a>
+                                    </mat-nav-list>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-
-                            <button mat-button class="menu__button" routerLink="inspecciones/create">
-                                Registra Inspección
-                            </button>
-                            <button mat-button class="menu__button" routerLink="inspecciones">
-                                Reporte Inspección
-                            </button>
-                            <p class="w3-margin-bottom"></p>
-
+                            <mat-nav-list>
+                                <a mat-list-item class="mat-list-item-second" *ngFor="let nav of item.children"
+                                    [routerLink]="[item.state, nav.state]" routerLinkActive="active">
+                                    <span class="mat-item-list-span">
+                                        {{nav.name}}
+                                    </span>
+                                </a>
+                            </mat-nav-list>
                         </mat-expansion-panel>
-                        <button mat-button class="menu__button" routerLink="clientes" (click)="deselectClient()">
-                            <mat-icon class="menu__icon">keyboard_arrow_left</mat-icon>
-                            Salir del cliente
-                        </button>
-                    </div>
-
-
+                    </mat-accordion>
+                    <mat-nav-list style="width: 100%" class="admin">
+                        <a mat-list-item routerLink="clientes" (click)="deselectClient()"
+                            routerLinkActive="nav-active">
+                            <mat-icon mat-list-icon class="mat-icon-menu">keyboard_arrow_left</mat-icon>
+                            <span class="mat-item-list-span">
+                                Salir del cliente
+                            </span>
+                        </a>
+                    </mat-nav-list>
                 </div>
-                <ng-template #select>
-                    <button mat-button class="menu__button" routerLink="clientes" routerLinkActive="nav-active">
-                        <mat-icon class="menu__icon">group</mat-icon>
-                        Seleccionar Cliente
-                    </button>
-                </ng-template>
             </div>
-
+            <ng-template #select>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <mat-nav-list>
+                                <a mat-list-item [ngClass]="{'nav-active': 'admin' == urlActive}">
+                                    <mat-icon mat-list-icon class="mat-icon-menu">admin_panel_settings</mat-icon>
+                                    <span class="mat-item-list-span">
+                                        Administración
+                                    </span>
+                                </a>
+                            </mat-nav-list>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-nav-list>
+                        <a mat-list-item class="mat-list-item-second" [routerLink]="['admin', 'roles']"
+                            routerLinkActive="active">
+                            <span class="mat-item-list-span">
+                                Roles
+                            </span>
+                        </a>
+                        <a mat-list-item class="mat-list-item-second" [routerLink]="['admin', 'usuarios']"
+                            routerLinkActive="active">
+                            <span class="mat-item-list-span">
+                                Usuarios
+                            </span>
+                        </a>
+                        <a mat-list-item class="mat-list-item-second" [routerLink]="['admin', 'clientes']"
+                            routerLinkActive="active">
+                            <span class="mat-item-list-span">
+                                Clientes
+                            </span>
+                        </a>
+                    </mat-nav-list>
+                </mat-expansion-panel>
+                <mat-nav-list style="width: 100%" class="admin">
+                    <a mat-list-item routerLink="clientes" routerLinkActive="active">
+                        <mat-icon mat-list-icon class="mat-icon-menu">group</mat-icon>
+                        <span class="mat-item-list-span">
+                            Seleccionar Cliente
+                        </span>
+                    </a>
+                </mat-nav-list>
+            </ng-template>
         </div>
     </mat-sidenav>
-    <mat-sidenav-content cdkScrollable>
-        <router-outlet></router-outlet>
+    <mat-sidenav-content cdkScrollable> 
+        <mat-toolbar class="main__toolbar">
+            <mat-toolbar-row>
+                <button mat-icon-button (click)="toggleSideMenu()">
+                    <mat-icon class="dark-icon">menu</mat-icon>
+                </button>
+                <a class="main__logo">
+                    <img src="../../assets/img/LOGO-tiresoft-login.png" class="main__logoimage" alt="logo" />
+                </a>
+                <span *ngIf="client$ | async as cl" class="name-customer">{{cl.razon_social}}</span>
+                <span fxFlex></span>
+                <button [mat-menu-trigger-for]="user" mat-icon-button class="ml-xs">
+                    <mat-icon [matBadge]="2" matBadgeColor="warn">question_answer</mat-icon>
+                </button>
+                <mat-menu #user="matMenu" class="opt-menu" x-position="before">
+                    <!-- <div mat-menu-item class="head-menu grad-blue">
+                       Settings
+                    </div> -->
+                    <button mat-menu-item>
+                       Mensaje 1
+                    </button>
+                    <button mat-menu-item>
+                        Mensaje 2
+                     </button>
+                </mat-menu>
+                <button (click)="end.toggle()" mat-icon-button class="ml-xs overflow-visible">
+                    <mat-icon [matBadge]="10" matBadgeColor="warn">notifications</mat-icon>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar> 
+        <div class="body-container">
+            <router-outlet></router-outlet>
+        </div>
     </mat-sidenav-content>
+    <mat-sidenav #end position="end" class="chat-panel" mode="over" opened="false">
+        <mat-tab-group mat-stretch-tabs>
+            <mat-tab>
+                <ng-template mat-tab-label>Proyectos</ng-template>
+                <div class="scroll">
+                    <mat-nav-list>
+                        <mat-divider></mat-divider>
+                        <h3 mat-subheader class="text-uppercase font-weight-bold">Projects Stats</h3>
+                        <mat-list-item>
+                            <p class="text-mat" mat-line>Project A</p>
+                            <mat-progress-bar mat-line mode="determinate" color="primary" value="20"></mat-progress-bar>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <p class="text-mat" mat-line>Project B </p>
+                            <mat-progress-bar mat-line mode="determinate" color="accent" value="80"></mat-progress-bar>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <p class="text-mat" mat-line>Project C</p>
+                            <mat-progress-bar mat-line mode="determinate" value="30"></mat-progress-bar>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                    </mat-nav-list>
+                </div>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>Notificaciones</ng-template>
+                <div class="scroll">
+                    <mat-list>
+                        <mat-list-item>
+                            <mat-icon mat-list-avatar class="mat-text-primary">people</mat-icon>
+                            <h4 mat-line>Social</h4>
+                            <p mat-line> 5 new members joined today</p>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <mat-icon mat-list-avatar class="mat-text-warn">local_offer</mat-icon>
+                            <h4 mat-line>Promotions</h4>
+                            <p mat-line>Updated your email
+                            </p>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <mat-icon mat-list-avatar class="mat-text-accent">info</mat-icon>
+                            <h4 mat-line>Updates</h4>
+                            <p mat-line> 15 new product added</p>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <mat-icon mat-list-avatar class="mat-deep-purple">delete_sweep</mat-icon>
+                            <h4 mat-line> 2 order cancelled</h4>
+                            <span class="text-mat mat-text-muted" mat-line>{{ 1427207139000 | date: 'fullDate' }}</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <mat-icon mat-list-avatar>check_circle</mat-icon>
+                            <h4 mat-line>System Scan completed</h4>
+                            <span class="text-mat mat-text-muted" mat-line>{{ 1427412725000 | date: 'fullDate' }}</span>
+                        </mat-list-item>
+                        <mat-list-item>
+                            <mat-icon mat-list-avatar>person_add</mat-icon>
+                            <h4 mat-line>4 Users connected</h4>
+                            <span class="text-mat mat-text-muted" mat-line>{{ 1428275520000 | date: 'fullDate' }}</span>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-sidenav>
 </mat-sidenav-container>

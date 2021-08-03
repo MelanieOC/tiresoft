@@ -20,13 +20,77 @@ export class MainComponent implements OnInit {
 
   @ViewChild('sideMenu', { static: true }) sidemenu;
 
-  user = null
+  userName = null
   client$: Observable<any>
 
   url: string;
+  urlActive:string;
 
   routeChange$: Observable<any>
 
+  menuItems = [
+    {
+      name: 'Configuración',
+      icon: 'settings',
+      state: 'configuracion',
+      children: [
+        { name: 'Criterios de aceptación', state: 'listacriterioaceptacion' },
+        { name: 'Tipo de cambio', state: 'tipocambio' },
+        { name: 'Aplicación', state: 'remanenteaplicacion' },
+        { name: 'Revisar reportes de inspecciones', state: 'reportes' },
+        { name: 'Importar datos', state: 'importar' },
+        { name: 'Plantas', state: 'listado_plantas' }
+      ]
+    },
+    {
+      name: 'Inspección',
+      icon: 'widgets',
+      state: 'inspecciones',
+      children: [
+        { name: 'Registra Inspección', state: 'create' },
+        { name: 'Reporte Inspección', state: 'list' }
+      ]
+    },
+    /*{
+      name: 'Indicadores',
+      icon: 'widgets',
+      open: false,
+      state: 'indicadores',
+      children: [
+        { name: 'Gráficas indicadores', state: '' }
+      ]
+    },*/
+    {
+      name: 'Reportes',
+      icon: 'trending_up',
+      state: 'reportes',
+      children: [
+        { name: 'Curva de desgaste', state: 'curva-desgaste' },
+        { name: 'Remanente de Rodado', state: 'remanenterodado' },
+        { name: 'Análisis del Scrap', state: 'analisis-scrap' },
+        { name: 'Análisis comparativo de neumáticos', state: 'analisis-comparativo' },
+        { name: 'Generar reporte consolidado', state: 'generar' }
+      ]
+    },
+    {
+      name: 'Mantenimiento',
+      icon: 'build',
+      state: 'mantenimiento',
+      children: [
+        { name: 'Vehículos', state: 'vehiculos' },
+        { name: 'Neumáticos', state: 'neumaticos' },
+        { name: 'SCRAP Neumáticos', state: 'scrap-neumaticos' }
+      ]
+    }
+  ]
+  /*
+   * trending_up
+   * build
+   * supervised_user_circle
+   * build_circle
+   * poll
+   * 
+   */
   constructor(
     private dbs: DatabaseService,
     private auth: AuthService,
@@ -34,13 +98,16 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllData()
+    this.userName = this.auth.user.value
+    console.log(this.userName)
+    this.urlActive = this.router.url.split('/')[2]
     this.client$ = this.dbs.customerSelect$
-    this.user = this.auth.user.value
+    
     this.routeChange$ = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       tap(event => {
         this.url = event.url;
+        this.urlActive = this.url.split('/')[2]
         if (this.isOver()) {
           //this.userService.openedMenu = false
           this.sidemenu.close();
@@ -50,18 +117,7 @@ export class MainComponent implements OnInit {
   }
 
   toggleSideMenu(): void {
-    if (this.isOver()) {
-      this.sidemenu.toggle()
-    }
-
-  }
-
-  confiOpened(): void {
-    this.confiOpenedFlag = true;
-  }
-
-  confiClosed(): void {
-    this.confiOpenedFlag = false;
+    this.sidemenu.toggle()
   }
 
   isOver(): boolean {
@@ -74,115 +130,7 @@ export class MainComponent implements OnInit {
   }
 
   logout() {
-    this.auth.logout()
     this.dbs.customerSelect.next(null)
-  }
-
-  getAllData() {
-    const formR = new FormData();
-    formR.append('id_accesibilidad', '0');
-    let allData = combineLatest(
-      this.dbs.getNuts().pipe(
-        map(res => {
-          let caps = res['tuercas']
-          return Object.values(caps)
-        })
-      ),
-      this.dbs.getObservation().pipe(
-        map(res => {
-          let caps = res['observaciones']
-          let arr = []
-          Object.keys(caps).forEach(k => {
-            let ops = []
-            if (caps[k]) {
-              ops = Object.values(caps[k]).map((p, k) => {
-                return {
-                  name: p,
-                  value: k + 1
-                }
-              })
-            }
-            arr.push({
-              name: k,
-              options: ops,
-              multi: !k.includes('rregular'),
-              check: false,
-              value: ''
-            })
-          })
-          return arr
-        })
-      ),
-      this.dbs.getReasons(formR).pipe(
-        map(res => {
-          return res['inaccesibilidad']
-        })
-      ),
-      this.dbs.getTypeCap().pipe(
-        map(res => {
-          let caps = res['tipo_tapa']
-          let arr = []
-          Object.keys(caps).forEach(k => {
-            arr.push({
-              id: k,
-              name: caps[k]
-            })
-          })
-          return arr
-        })
-      ),
-      this.dbs.getDuales().pipe(
-        map(res => {
-          let caps = res['duales']
-          let arr = []
-          Object.keys(caps).forEach(k => {
-            arr.push({
-              id: k,
-              name: caps[k],
-              check: false
-            })
-          })
-          return arr
-        })
-      ),
-      this.dbs.getAccessibility().pipe(
-        map(res => {
-          let caps = res['accesibilidad']
-          let arr = []
-          Object.keys(caps).forEach(k => {
-            arr.push({
-              id: k,
-              name: caps[k]
-            })
-          })
-          return arr
-        })
-      ),
-      this.dbs.getDivision().pipe(
-        map(res => {
-          let caps = res['separacion']
-          return Object.values(caps)
-        })
-      ),
-      this.dbs.getStatus().pipe(
-        map(res => {
-          let caps = res['estado']
-          return Object.values(caps)
-        })
-      )
-    )
-
-    allData.subscribe(res => {
-      this.dbs.nuts = res[0]
-      this.dbs.observations = res[1]
-      this.dbs.reasons = res[2]
-      this.dbs.caps = res[3]
-      this.dbs.duales = res[4]
-      this.dbs.access = res[5]
-      this.dbs.divisions = res[6]
-      this.dbs.status = res[7]
-
-      this.dbs.loadAll = true
-    })
+    this.auth.logout()   
   }
 }

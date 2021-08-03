@@ -6,8 +6,9 @@
 
 <mat-dialog-content>
     <div style="margin-bottom: 5px;">
-        <app-table-responsive [data]="allData" [search]="false" [columns]="columns" [show]="2" [options]="false"
-            [delete]="false" (onEdit)="edit($event)"></app-table-responsive>
+        <app-table-responsive [data]="allData" [search]="true" [columns]="columns" [paginate]="true"
+            [actionList]="actions" (onAction)="edit($event)">
+        </app-table-responsive>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

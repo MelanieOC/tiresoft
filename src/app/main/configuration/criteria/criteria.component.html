@@ -1,0 +1,31 @@
+<mat-toolbar class="ts-toolbar">
+    <span>Criterios de aceptación</span>
+</mat-toolbar>
+<div class="ts-container">
+    <mat-card style="margin-bottom: 25px;">
+        <form [formGroup]="filterForm" fxLayout="row wrap" fxLayoutAlign="start baseline">
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="35">
+                <mat-label>Indicador</mat-label>
+                <mat-select formControlName="indicator">
+                    <mat-option *ngFor="let ic of indicators" [value]="ic.value">
+                        {{ic.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="35">
+                <mat-label>Año</mat-label>
+                <mat-select formControlName="year">
+                    <mat-option *ngFor="let y of years" [value]="y">
+                        {{y}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="30" fxLayout="row wrap" fxLayoutAlign="end start">
+                <button mat-raised-button color="primary" (click)="openDialog()">Registrar</button>
+            </div>
+
+        </form>
+    </mat-card>
+    <app-table-responsive [data]="allData" [columns]="columns" [search]="false" [paginate]="true" [actionList]="actions"
+        (onAction)="editRegister($event)"></app-table-responsive>
+</div>

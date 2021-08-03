@@ -2,9 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { take } from 'rxjs/operators';
+import { InspectionTireFormComponent } from 'src/app/components/inspection-tire-form/inspection-tire-form.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { DatabaseService } from 'src/app/services/database.service';
-import { TireFormComponent } from '../../tire-form/tire-form.component';
+import { InspectionService } from 'src/app/services/inspection.service';
+
 
 @Component({
   selector: 'app-inspection-list-dialog',
@@ -15,27 +17,32 @@ export class InspectionListDialogComponent implements OnInit {
   loader: boolean = true
   allData: any = []
   columns = [
-    { name: 'Pos', slug: 'posicion' },
-    { name: 'Serie neumático', slug: 'num_serie' },
-    { name: 'Marca', slug: 'marca' },
-    { name: 'Modelo', slug: 'modelo' },
-    { name: 'Medida', slug: 'medida' },
-    { name: 'Eje', slug: 'eje' },
-    { name: 'Condición', slug: 'condicion' },//modificar
-    { name: 'Número Reencauche', slug: 'cantidad_reencauche' },
-    { name: 'Empresa Reencauchadora', slug: 'empresa_reencauchadora' },
-    { name: 'Presión', slug: 'presionS' }, //modificar más tipo presión
-    { name: 'Tapa de Pitón', slug: 'piton' }, //modificar
-    { name: 'Estado', slug: 'estado' },
-    { name: 'Km de instalación', slug: 'km_instalacion' },
-    { name: 'Km Recorrido', slug: 'km_recorrido' },
-    { name: 'Km Proyectado', slug: 'km_proyectado' },
-    { name: 'Recomendación', slug: 'recomendacion' }
+    { name: 'Acciones', slug: 'options', stick: true, width: 70 },
+    { name: 'Pos', slug: 'posicion', stick: true },
+    { name: 'Serie neumático', slug: 'num_serie', stick: true, width: 80 },
+    { name: 'Marca', slug: 'marca', stick: true, width: 100 },
+    { name: 'Modelo', slug: 'modelo', stick: false, width: 100 },
+    { name: 'Medida', slug: 'medida', stick: false, width: 110 },
+    { name: 'Eje', slug: 'eje', stick: false, width: 80 },
+    { name: 'Condición', slug: 'condicion', stick: false },//modificar
+    { name: 'Número Reencauche', slug: 'cantidad_reencauche', stick: false },
+    { name: 'Empresa Reencauchadora', slug: 'empresa_reencauchadora', stick: false },
+    { name: 'Presión', slug: 'presionS', stick: false, width: 70 }, //modificar más tipo presión
+    { name: 'Tapa de Pitón', slug: 'piton', stick: false, width: 120 }, //modificar
+    { name: 'Estado', slug: 'estado', stick: false, width: 150 },
+    { name: 'Km de instalación', slug: 'km_instalacion', stick: false, width: 85 },
+    { name: 'Km Recorrido', slug: 'km_recorrido', stick: false },
+    { name: 'Km Proyectado', slug: 'km_proyectado', stick: false },
+    { name: 'Recomendación', slug: 'recomendacion', stick: false, width: 180 }
+  ]
+
+  actions = [
+    { icon: 'edit', id: 1 }
   ]
 
   constructor(
     private dbs: DatabaseService,
-    private dialogRef: MatDialogRef<InspectionListDialogComponent>,
+    private inspectionService: InspectionService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private auth: AuthService,
     private _bottomSheet: MatBottomSheet
@@ -51,12 +58,12 @@ export class InspectionListDialogComponent implements OnInit {
     formData.append('cliente_id', select.id_cliente);
     formData.append('identificador', this.data.id);
 
-    this.dbs.listDetailInspections(formData).subscribe((response: any) => {
+    this.inspectionService.listDetailInspections(formData).subscribe((response: any) => {
       this.loader = false
       this.allData = response.data.map(r => {
         r['condicion'] = r.nuevo_or_reencauchado == 1 ? 'Nuevo' : 'Reencauchado'
         r['presionS'] = r.presion + ' ' + r.tipo_presion
-        r['piton'] = this.dbs.caps.find(el => el.id == r.valvula).name
+        r['piton'] = this.inspectionService.caps.find(el => el.id == r.valvula) ? this.inspectionService.caps.find(el => el.id == r.valvula).name : ''
         return r
       })
     }, error => {
@@ -64,7 +71,8 @@ export class InspectionListDialogComponent implements OnInit {
     });
   }
 
-  edit(row) {
+  edit(ev) {
+    const row = ev.row
     let info = {
       identificador: row.identificador,
       codigo: '',
@@ -77,7 +85,7 @@ export class InspectionListDialogComponent implements OnInit {
       crated_user: this.auth.user.value.id
     }
 
-    this._bottomSheet.open(TireFormComponent, {
+    this._bottomSheet.open(InspectionTireFormComponent, {
       data: {
         row: row,
         id: row.neumatico_id,

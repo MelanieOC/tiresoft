@@ -39,10 +39,10 @@ export class AuthService {
   login(user) {
     return this.http.post(`${this.url}/api/login`, user).pipe(
       tap((response: any) => {
-        this.token.next(response.access_token);
+        this.token.next(response.token);
         this.user.next(response.user);
         localStorage.setItem('user_tiresoft', JSON.stringify(response.user));
-        localStorage.setItem('token_tiresoft', response.access_token);
+        localStorage.setItem('token_tiresoft', response.token);
         
       })
     );

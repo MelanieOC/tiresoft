@@ -1,0 +1,59 @@
+<div mat-dialog-title>
+    <h4 style="font-size: 15px;margin-bottom: 0px;">
+        Registrar Criterio de Aceptación
+    </h4>
+    <mat-divider></mat-divider>
+</div>
+<mat-dialog-content>
+    <form [formGroup]="registerForm">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+                <mat-label>Indicador</mat-label>
+                <input matInput type="text" readonly autocomplete="off" formControlName="indicator">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+                <mat-label>Año</mat-label>
+                <mat-select formControlName="year">
+                    <mat-option *ngFor="let y of years" [value]="y">
+                        {{y}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start center">
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+                <mat-label>Modelo/Medida</mat-label>
+                <mat-select formControlName="model">
+                    <mat-option *ngFor="let y of years" [value]="y">
+                        {{y}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+                <mat-label>Criterio objetivo</mat-label>
+                <input matInput type="number" autocomplete="off" formControlName="criteria">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+                <mat-label>Criterio Tolerable máximo</mat-label>
+                <input matInput type="number" autocomplete="off" formControlName="max">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+                <mat-label>Criterio Tolerable mínimo</mat-label>
+                <input matInput type="number" autocomplete="off" formControlName="min">
+            </mat-form-field>
+            <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+                <mat-label>Criterio deficiente</mat-label>
+                <input matInput type="number" autocomplete="off" formControlName="deficient">
+            </mat-form-field>
+        </div>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button type="button" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="warn" type="button" mat-dialog-close>
+        Guardar
+    </button>
+</mat-dialog-actions>

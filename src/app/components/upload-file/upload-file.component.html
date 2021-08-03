@@ -1,0 +1,22 @@
+<div class="container" *ngIf="files.length == 0" appDragndrop (fileDropped)="onFileDropped($event)">
+    <input type="file" #fileDropRef id="fileDropRef" accept=".xls,.xlsx"
+        (change)="fileBrowseHandler($event.target.files)" />
+    <mat-icon style="font-size: 40px;width: 40px;height: 40px;">cloud_upload</mat-icon>
+    <h3>Arrastra el archivo aquí para subirlo</h3>
+</div>
+<div class="files-list">
+    <div class="single-file" *ngFor="let file of files; let i = index">
+        <mat-icon style="font-size: 35px;width: 35px;height: 35px;margin-right: 5px;">description</mat-icon>
+        <div class="info">
+            <h4 class="name">
+                {{ file?.name }}
+            </h4>
+            <p class="size">
+                {{ formatBytes(file?.size) }}
+            </p>
+            <mat-progress-bar mode="determinate" [value]="file?.progress" *ngIf="file.progress != 100">
+            </mat-progress-bar>
+        </div>
+        <mat-icon class="delete" *ngIf="file.progress == 100" (click)="deleteFile(i)">delete</mat-icon>
+    </div>
+</div>

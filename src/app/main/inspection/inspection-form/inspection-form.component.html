@@ -1,7 +1,7 @@
-<mat-toolbar>
+<mat-toolbar class="ts-toolbar">
     <span>Registro de Inspección</span>
 </mat-toolbar>
-<div class="ts-container" *ngIf="view == 1">
+<div class="ts-container">
     <mat-horizontal-stepper linear #stepper>
         <mat-step [stepControl]="inspectForm">
             <ng-template matStepLabel>Registro</ng-template>
@@ -35,8 +35,6 @@
                     Finalizar Inspección
                 </button>
             </div>
-            <!--app-table-responsive [data]="rows" [columns]="columns" [show]="2" [search]="false" [options]="false"
-                [delete]="true" (onEdit)="openEditBottom($event)" (onDialog)="deleteRow($event)"></app-table-responsive-->
         </mat-step>
     </mat-horizontal-stepper>
 

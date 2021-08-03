@@ -14,6 +14,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [MainComponent],
@@ -29,7 +31,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     FlexLayoutModule,
     MatSidenavModule,
     MatBadgeModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatListModule,
+    MatTabsModule
   ]
 })
 export class MainModule { }

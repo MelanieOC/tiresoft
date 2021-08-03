@@ -26,7 +26,7 @@ export class SelectCustomerComponent implements OnInit {
   ngOnInit(): void {
     let user = this.auth.user.value
     const formUser = new FormData();
-    formUser.append('id_usuario', user.id);
+    formUser.append('user_id', user.id);
     this.dbs.getClientList(formUser).subscribe(res => {
       this.listCustomer = res['data']
     })
@@ -34,7 +34,7 @@ export class SelectCustomerComponent implements OnInit {
 
   selectCustomer(){
     this.dbs.customerSelect.next(this.customerForm.value)
-    this.router.navigate(['/main/inspecciones/create'])
+    this.router.navigate(['/main/home'])
     localStorage.setItem('client_tiresoft', JSON.stringify(this.customerForm.value));
   }
 

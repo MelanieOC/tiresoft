@@ -1,0 +1,132 @@
+<app-title-bar [title]="title" [return]="true"></app-title-bar>
+<div class="ts-container">
+    <div class="ts-card">
+        <form [formGroup]="rolForm" style="margin-bottom: 16px;">
+            <div fxLayout="row wrap" fxLayoutAlign="start center">
+                <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput autocomplete="off" required type="text" formControlName="name">
+                    <mat-error>
+                        Completa este campo.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+                    <mat-label>Descripción</mat-label>
+                    <input matInput type="text" autocomplete="off" formControlName="description">
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+    <div class="ts-card">
+        <h4 style="font-weight: 600;">Permisos</h4>
+        <!--mat-progress-bar mode="indeterminate" color="primary" *ngIf="!loadingList"></mat-progress-bar-->
+        <div fxLayout="row wrap" fxLayoutAlign="start start" fxShow fxHide.gt-sm>
+            <section class="example-section" class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50"
+                *ngFor="let task of listPermits">
+                <span class="example-list-section">
+                    <mat-checkbox class="example-margin" color="warn" [(ngModel)]="task.check"
+                        [indeterminate]="someComplete(task)" (change)="setAll($event.checked, task)">
+                        {{task.name}}
+                    </mat-checkbox>
+                </span>
+                <span class="example-list-section">
+                    <ul>
+                        <ng-container *ngFor="let subtask of task.permits">
+                            <li *ngIf="subtask.permits; else onlyTask" style="margin:12px 0">
+                                <span class="example-list-section">
+                                    <mat-checkbox class="example-margin" color="primary" [(ngModel)]="subtask.check"
+                                        [indeterminate]="someComplete(subtask)"
+                                        (change)="setAll($event.checked,subtask)">
+                                        {{subtask.name}}
+                                    </mat-checkbox>
+                                </span>
+                                <span class="example-list-section">
+                                    <ul>
+                                        <li *ngFor="let subsubtask of subtask.permits">
+                                            <mat-checkbox [(ngModel)]="subsubtask.check" color="primary"
+                                                (ngModelChange)="updateAllComplete()">
+                                                {{subsubtask.name}}
+                                                <span [ngSwitch]="subsubtask.type">
+                                                    <span *ngSwitchCase="'list'">Listar</span>
+                                                    <span *ngSwitchCase="'add'">Añadir</span>
+                                                    <span *ngSwitchCase="'edit'">Editar</span>
+                                                    <span *ngSwitchCase="'delete'">Eliminar</span>
+                                                </span>
+                                            </mat-checkbox>
+                                        </li>
+                                    </ul>
+                                </span>
+                            </li>
+                            <ng-template #onlyTask>
+                                <li>
+                                    <mat-checkbox [(ngModel)]="subtask.check" color="primary"
+                                        (ngModelChange)="updateAllComplete()">
+                                        {{subtask.name}}
+                                    </mat-checkbox>
+                                </li>
+                            </ng-template>
+                        </ng-container>
+                    </ul>
+                </span>
+            </section>
+        </div>
+        <div *ngFor="let task of listPermits" fxHide fxShow.gt-sm>
+            <div class="title-section check-title">
+                <span class="example-list-section">
+                    <mat-checkbox class="example-margin" color="warn" [(ngModel)]="task.check"
+                        [indeterminate]="someComplete(task)" (change)="setAll($event.checked, task)">
+                        {{task.name}}
+                    </mat-checkbox>
+                </span>
+            </div>
+            <div *ngIf="task.all">
+                <div style="margin-bottom: 16px;padding-left:34px">
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th style="text-align: center;">Listar</th>
+                            <th style="text-align: center;">Añadir</th>
+                            <th style="text-align: center;">Editar</th>
+                            <th style="text-align: center;">Eliminar</th>
+                        </tr>
+                        <tr *ngFor="let subtask of task.permits">
+                            <td style="min-width: 150px;">
+                                <span class="example-list-section">
+                                    <mat-checkbox class="example-margin" color="primary" [(ngModel)]="subtask.check"
+                                        [indeterminate]="someComplete(subtask)"
+                                        (change)="setAll($event.checked,subtask)">
+                                        {{subtask.name}}
+                                    </mat-checkbox>
+                                </span>
+                            </td>
+                            <td *ngFor="let subsubtask of subtask.permits" style="width: 60px;text-align: center;">
+                                <mat-checkbox [(ngModel)]="subsubtask.check" color="primary"
+                                    (ngModelChange)="updateAllComplete()">
+                                </mat-checkbox>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div *ngIf="!task.all">
+                <span class="example-list-section">
+                    <ul>
+                        <li *ngFor="let subtask of task.permits">
+                            <mat-checkbox [(ngModel)]="subtask.check" color="primary"
+                                (ngModelChange)="updateAllComplete()">
+                                {{subtask.name}}
+                            </mat-checkbox>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end start">
+            <button mat-raised-button color="primary" [disabled]="buttonSubmit" (click)="edit?save():saveNew()"
+                type="button">
+                Guardar
+            </button>
+        </div>
+    </div>
+
+</div>

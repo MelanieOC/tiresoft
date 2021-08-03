@@ -1,0 +1,22 @@
+<div class="row clearfix">
+    <button mat-flat-button color="primary" style="margin-bottom: 10px">
+        <mat-icon style="margin-right: 8px">cloud_download</mat-icon>
+        Descargar formato
+    </button>
+    <div style="padding: 15px;">
+        <h4><b>Pasos para importar los neumáticos</b></h4>
+        <p><span class="step">PASO 1</span> Solo arrastre el archivo excel de la plantilla realizada</p>
+        <p><span class="step">PASO 2</span> Una vez seleccionado el archivo se te abrira una ventana de los datos importados con sus validaciones correspondientes</p>
+        <p><span class="step">PASO 3</span> Para verificar si los datos se relacionaron con el sistema, haz click en
+            <a mat-stroked-button color="primary" href="https://www.google.com/" target="_blank">Ir a Criterios de Aceptacion</a>
+            y te rediccionará a la lista de Neumáticos.
+        </p>
+    </div>
+</div>
+
+
+<app-upload-file (getFile)="onFileSelected($event)"></app-upload-file>
+<!--div *ngIf="allData.length">
+    <app-table-error [data]="allData" [columns]="columns">
+    </app-table-error>
+</div-->

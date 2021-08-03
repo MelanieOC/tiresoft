@@ -1,0 +1,14 @@
+<nav mat-tab-nav-bar>
+    <a mat-tab-link routerLink="costoporkilometro" routerLinkActive #costo="routerLinkActive"
+        [active]="costo.isActive">
+        Costo por Kilómetro/Hora
+    </a>
+    <a mat-tab-link routerLink="indicereencauche" routerLinkActive #reencauche="routerLinkActive"
+        [active]="reencauche.isActive">
+        Índice Reencauche
+    </a>
+    <a mat-tab-link routerLink="indicereencauchabilidad" routerLinkActive #reencauchabilidad="routerLinkActive"
+        [active]="reencauchabilidad.isActive">
+        Índice Reencauchabilidad
+    </a>
+</nav>

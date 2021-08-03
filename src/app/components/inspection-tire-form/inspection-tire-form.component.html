@@ -1,0 +1,225 @@
+<h2 style="font-size: 1.2em;margin:0">
+    <button mat-icon-button class="w3-hide-medium w3-hide-large" (click)="close()">
+        <mat-icon>keyboard_backspace</mat-icon>
+    </button>
+    Inspección de neumático
+</h2>
+<hr>
+<form [formGroup]="tireForm">
+    <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+
+        <mat-form-field class="pl-xs pr-xs" fxFlex="48" appearance="outline">
+            <mat-label>Posición</mat-label>
+            <input matInput type="text" readonly autocomplete="off" formControlName="position">
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" fxFlex="48" appearance="outline">
+            <mat-label>Nro. Serie</mat-label>
+            <input matInput type="text" readonly autocomplete="off" formControlName="serie">
+        </mat-form-field>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+        <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="33">
+            <mat-label>Ejes</mat-label>
+            <mat-select disableOptionCentering formControlName="ejes">
+                <mat-option [value]="1">Direccional</mat-option>
+                <mat-option [value]="2">Tracción</mat-option>
+                <mat-option [value]="3">Eje libre</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33">
+            <mat-label>Tipo de Presión</mat-label>
+            <mat-select disableOptionCentering formControlName="type">
+                <mat-option value="PSI">PSI</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" fxFlex="48" fxFlex.gt-xs="33">
+            <mat-label>Presión actual</mat-label>
+            <input matInput required autocomplete="off" type="number" [min]="0" [max]="999" formControlName="pressure"
+                (keypress)="onlyNumber($event,tireForm.get('pressure').value,3)">
+        </mat-form-field>
+
+    </div>
+
+</form>
+<h4 class="title-form">Tapa de Pitón </h4>
+
+<form [formGroup]="capForm">
+    <div fxLayout="row wrap" fxLayoutAlign="start start">
+        <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="33">
+            <mat-label>Tapa</mat-label>
+            <mat-select required disableOptionCentering formControlName="type">
+                <mat-option *ngFor="let c of caps" [value]="c.id">{{c.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="pl-xs pr-xs" fxLayout="row wrap" fxLayoutAlign="space-between start" style="margin-bottom: 10px;"
+            fxFlex="100" fxFlex.gt-xs="33">
+            <div>Accesibilidad</div>
+            <mat-radio-group color="primary" aria-label="Select an option" formControlName="accessibility">
+                <mat-radio-button style="margin-right: 15px;" [value]="1">Sí</mat-radio-button>
+                <mat-radio-button [value]="0">No</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <mat-form-field *ngIf="capForm.get('accessibility').value == 0" class="pl-xs pr-xs" fxFlex="100"
+            fxFlex.gt-xs="33">
+            <mat-label>Motivo</mat-label>
+            <mat-select disableOptionCentering formControlName="reason">
+                <mat-option *ngFor="let r of inspectionService.reasons" [value]="r.dato">{{r.dato}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </div>
+
+</form>
+
+<h4 class="title-form">Profundidad de Rodado (mm) </h4>
+
+<form [formGroup]="rolledForm" style="margin-bottom: 40px;">
+    <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+        <mat-form-field class="pl-xs pr-xs" fxFlex="30" fxFlex.gt-xs="33">
+            <mat-label>Izquierdo</mat-label>
+            <input matInput required type="number" autocomplete="off" formControlName="left"
+                (keypress)="onlyNumber($event,rolledForm.get('left').value,2)">
+            <mat-error>
+                <span *ngIf="rolledForm.get('left').errors?.required">Campo requerido</span>
+                <span *ngIf="rolledForm.get('left').errors?.max">
+                    Es mayor al remanente registrado en la instalación/inspección anterior
+                    ({{validNumber.v_exterior}})
+                </span>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" fxFlex="30" fxFlex.gt-xs="33">
+            <mat-label>Medio</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="center"
+                (keypress)="onlyNumber($event,rolledForm.get('center').value,2)">
+            <mat-error>
+                <span *ngIf="rolledForm.get('center').errors?.max">
+                    Es mayor al remanente registrado en la instalación/inspección anterior
+                    ({{validNumber.v_medio}})
+                </span>
+            </mat-error>
+
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" fxFlex="30" fxFlex.gt-xs="33">
+            <mat-label>Derecho</mat-label>
+            <input matInput required type="number" autocomplete="off" formControlName="right"
+                (keypress)="onlyNumber($event,rolledForm.get('right').value,2)">
+            <mat-error>
+                <span *ngIf="rolledForm.get('right').errors?.required">Campo requerido</span>
+                <span *ngIf="rolledForm.get('right').errors?.max">
+                    Es mayor al remanente registrado en la instalación/inspección anterior
+                    ({{validNumber.v_interior}})
+                </span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+</form>
+
+<h4 class="title-form">Duales mal hermanados</h4>
+
+<div class="example-radio-group">
+    <mat-checkbox [color]="d.color" *ngFor="let d of duales" class="example-margin"
+        (change)="changeDuales($event.checked,d)" [disabled]="d.noChange?d.check:false" [(ngModel)]="d.check">
+        {{d.name}}
+    </mat-checkbox>
+</div>
+
+<h4 class="title-form">Separación entre Duales</h4>
+
+<div>
+    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="dial">
+        <mat-radio-button color="primary" *ngFor="let s of inspectionService.divisions" class="example-radio-button" [value]="s">
+            {{s}}
+        </mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<h4 class="title-form">Observaciones</h4>
+<div class="example-radio-group">
+    <div *ngFor="let d of observs" class="example-margin">
+        <mat-checkbox color="primary" [(ngModel)]="d.check">
+            {{d.name}}
+        </mat-checkbox>
+        <div *ngIf="d.options.length">
+            <div *ngIf="d.multi;else multi">
+                <mat-form-field style="width: 100%;margin: 8px 0;" *ngIf="d.check">
+                    <mat-select disableOptionCentering placeholder="Seleccione" [(ngModel)]="d.value">
+                        <mat-option *ngFor="let t of d.options" [value]="t.value">{{t.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <ng-template #multi>
+                <mat-form-field style="width: 100%;margin: 8px 0;" *ngIf="d.check">
+                    <mat-select [(ngModel)]="d.value" placeholder="Seleccione" [multiple]="true" #multiSelect>
+                        <mat-option>
+                            <ngx-mat-select-search placeholderLabel="Buscar..." noEntriesFoundLabel="'Sin Resultados'"
+                                [formControl]="bankMultiFilterCtrl"></ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let b of filtered$ | async" [value]="b.value">
+                            {{b.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </ng-template>
+        </div>
+    </div>
+
+</div>
+
+<h4 class="title-form">Estados</h4>
+
+<div>
+    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="status">
+        <mat-radio-button color="primary" *ngFor="let s of inspectionService.status;let k = index" class="example-radio-button"
+            [value]="k">
+            {{s}}
+        </mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<div *ngIf="status==2" style=" margin: 0 auto 16px;width: 100%;max-width:300px">
+    <img class="img-div" (click)="photoURL.click()" *ngIf="photo!=null" style="width: 100%;" [src]="photo"
+        alt="fotografía">
+    <img class="img-div" (click)="photoURL.click()" *ngIf="photo==null" style="width: 100%;"
+        src="../../../assets/img/imagen_no_disponible.jpg" alt="sin fotografía">
+
+    <mat-progress-bar *ngIf="photos?.resizing$.photoURL | async" style="width:100%" mode="indeterminate">
+    </mat-progress-bar>
+    <span *ngIf="photos.resizing$.photoURL | async" style="width:100%;font-size: 0.7em;">*comprimiendo</span>
+    <input style="display: none" #photoURL type="file" accept='image/*' capture="environment"
+        (change)="addNewPhoto('photoURL', photoURL.files)" />
+</div>
+<h4 class="title-form">Estados de tuercas</h4>
+
+<form [formGroup]="nutsForm">
+    <div fxLayout="row wrap" fxLayoutAlign="start start">
+        <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+            <mat-label>Estados de tuercas</mat-label>
+            <mat-select disableOptionCentering formControlName="status">
+                <mat-option *ngFor="let t of inspectionService.nuts; let i = index" [value]="i+1">{{t}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="pl-xs pr-xs" fxFlex="100" fxFlex.gt-xs="50">
+            <mat-label>Cantidad de tuercas</mat-label>
+            <input matInput autocomplete="off" type="number" formControlName="amount"
+                (keypress)="onlyNumber($event,nutsForm.get('amount').value,2)">
+        </mat-form-field>
+    </div>
+</form>
+
+<h4 class="title-form">Recomendación</h4>
+
+<mat-form-field style="width: 100%;">
+    <mat-label>Recomendación</mat-label>
+    <textarea matInput [formControl]="observation"></textarea>
+</mat-form-field>
+<mat-progress-bar mode="indeterminate" *ngIf="load"></mat-progress-bar>
+<div fxLayout="row wrap" fxLayoutAlign="end end">
+    <button color="warn" style="margin-right: 5px;" mat-stroked-button (click)="close()">
+        Cancelar
+    </button>
+    <button color="warn" mat-raised-button
+        [disabled]="load || tireForm.invalid || rolledForm.invalid || capForm.invalid || nutsForm.invalid"
+        (click)="save()">
+        Guardar
+    </button>
+</div>

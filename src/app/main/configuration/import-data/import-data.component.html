@@ -1,0 +1,19 @@
+<mat-toolbar class="ts-toolbar">
+    <span>Importar datos</span>
+</mat-toolbar>
+<nav mat-tab-nav-bar>
+    <a mat-tab-link routerLink="vehiculos" routerLinkActive #vehicle="routerLinkActive" [active]="vehicle.isActive">
+        Vehículos
+    </a>
+    <a mat-tab-link routerLink="neumaticos" routerLinkActive #tire="routerLinkActive" [active]="tire.isActive">
+        Neumáticos
+    </a>
+    <a mat-tab-link routerLink="criterios" routerLinkActive #criteria="routerLinkActive" [active]="criteria.isActive">
+        Criterios
+    </a>
+</nav>
+<div class="ts-container">
+    <div class="ts-card">
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
   getClient(init) {
     let user = this.auth.user.value
     const formUser = new FormData();
-    formUser.append('id_usuario', user.id);
+    formUser.append('user_id', user.id);
     this.dbs.getClientList(formUser).subscribe(res => {
       if (res['data']) {
         let clients = res['data'].length
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
         if (clients == 1) {
           this.dbs.customerSelect.next(res['data'][0])
           localStorage.setItem('client_tiresoft', JSON.stringify(res['data'][0]));
-          this.ruta = '/main/inspecciones'
+          this.ruta = '/main/home'
         }
 
         if (init) {
@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
 
   goInit() {
     if (this.dbs.customerSelect.value) {
-      this.router.navigate(['/main/inspecciones'])
+      this.router.navigate(['/main/home'])
     } else {
       this.router.navigate([this.ruta])
     }

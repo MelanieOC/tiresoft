@@ -1,0 +1,9 @@
+<app-title-bar [title]="'Plantas'" [return]="true"></app-title-bar>
+<div class="ts-container">
+    <button mat-raised-button color="primary" (click)="openDialog(null)" style="margin-bottom: 25px;">
+        <mat-icon style="vertical-align: middle;margin-right: 5px;">add_circle_outline</mat-icon> Nuevo
+    </button>
+    <app-table-responsive [data]="allData" [search]="false" [columns]="columns" [paginate]="false"
+        [actionList]="actions" (onAction)="getAction($event)">
+    </app-table-responsive>
+</div>

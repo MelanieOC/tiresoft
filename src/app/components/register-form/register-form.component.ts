@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, startWith, take, tap } from 'rxjs/operators';
 import { DatabaseService } from 'src/app/services/database.service';
+import { InspectionService } from 'src/app/services/inspection.service';
 
 @Component({
   selector: 'app-register-form',
@@ -31,7 +32,8 @@ export class RegisterFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private dbs: DatabaseService
+    private dbs: DatabaseService,
+    private inspectionService: InspectionService
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +58,7 @@ export class RegisterFormComponent implements OnInit {
     if (this.select) {
       const formC = new FormData()
       formC.append('id_cliente', this.select.id_cliente);
-      this.dbs.getVehicleList(formC).subscribe(resp => {
+      this.inspectionService.getVehicleList(formC).subscribe(resp => {
         this.clientList.next(resp['vehiculos'])
         this.plants = resp['planta']
         this.inspectForm.get('tow').enable()
@@ -80,7 +82,7 @@ export class RegisterFormComponent implements OnInit {
         if (vh) {
           const formV = new FormData()
           formV.append('id_vehiculo', vh);
-          this.dbs.getTiresByVehicle(formV).subscribe(resp => {
+          this.inspectionService.getTiresByVehicle(formV).subscribe(resp => {
             let arr = this.clientList.value
             let sl = arr.find(v => v.id_vehiculo == vh)
             //this.selectVehicle = `${sl.placa} | ${sl.codigo}`
