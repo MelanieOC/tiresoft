@@ -1,1 +1,68 @@
-<p>customers-form works!</p>
+<app-title-bar [title]="title" [return]="true"></app-title-bar>
+<div class="ts-container">
+    <div class="ts-card">
+        <form [formGroup]="customerForm" autocomplete="off">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+
+                <div fxFlex="100" fxFlex.gt-xs="70">
+                    <div fxLayout="row wrap" fxLayoutAlign="start start">
+                        <mat-form-field class="pl-xs pr-xs" fxFlex="100" >
+                            <mat-label>Razón Social</mat-label>
+                            <input matInput required type="text" formControlName="name">
+                            <mat-error>
+                                Completa este campo.
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="pl-xs pr-xs" fxFlex="100" >
+                            <mat-label>Ruc</mat-label>
+                            <input matInput required type="text" formControlName="ruc">
+                            <mat-error>
+                                Completa este campo.
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="pl-xs pr-xs" fxFlex="100" >
+                            <mat-label>Dirección</mat-label>
+                            <input matInput required type="text" formControlName="address">
+                            <mat-error>
+                                Completa este campo.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxFlex="100" fxFlex.gt-xs="30">
+                    <div style="max-width: 200px;margin: auto;">
+
+                        <div class="img-div first_img" fxLayout="row wrap" fxLayoutAlign="center center"
+                            (click)="photoURL.click()" *ngIf="photo==null" style="width: 100%;">
+                            <div style="text-align: center;">
+                                <mat-icon>backup</mat-icon>
+                                <div>Agregar Logotipo</div>
+                            </div>
+                        </div>
+                        <div *ngIf="photo!=null" style="position: relative;">
+                            <span class="firm-label">Logotipo</span>
+                            <img class="img-div" (click)="photoURL.click()" style="object-fit: contain;" [src]="photo"
+                                alt="fotografía">
+                        </div>
+                        <mat-progress-bar *ngIf="photos?.resizing$.photoURL | async" style="width:100%"
+                            mode="indeterminate">
+                        </mat-progress-bar>
+                        <span *ngIf="photos.resizing$.photoURL | async"
+                            style="width:100%;font-size: 0.7em;">*comprimiendo</span>
+                        <input style="display: none" #photoURL type="file" accept='image/*' capture="environment"
+                            (change)="addNewPhoto('photoURL', photoURL.files)" />
+                    </div>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="end start" style="margin-top: 15px;">
+                <button mat-raised-button color="primary" [disabled]="buttonSubmit" (click)="edit?saveEdit():save()"
+                    type="button">
+                    Guardar
+                </button>
+            </div>
+        </form>
+
+    </div>
+    <mat-progress-bar *ngIf="buttonSubmit" style="width:100%" mode="indeterminate">
+    </mat-progress-bar>
+</div>

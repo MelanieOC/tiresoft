@@ -17,7 +17,7 @@ export class UserService {
   }
 
   getList() {
-    return this.http.get(`${this.url}/api/user/clients/data`);
+    return this.http.get(`${this.url}/api/user/list/data`);
   }
 
   getUser(user) { 

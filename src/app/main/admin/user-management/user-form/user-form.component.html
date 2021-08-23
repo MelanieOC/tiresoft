@@ -55,14 +55,18 @@
                 </div>
                 <div fxFlex="100" fxFlex.gt-xs="25">
                     <div style="max-width: 200px;margin: auto;">
-                        <img class="img-div" (click)="photoURL.click()" *ngIf="photo!=null" style="object-fit: contain;"
-                            [src]="photo" alt="fotografía">
+
                         <div class="img-div first_img" fxLayout="row wrap" fxLayoutAlign="center center"
                             (click)="photoURL.click()" *ngIf="photo==null" style="width: 100%;">
                             <div style="text-align: center;">
                                 <mat-icon>backup</mat-icon>
                                 <div>Agregar Firma</div>
                             </div>
+                        </div>
+                        <div *ngIf="photo!=null" style="position: relative;">
+                            <span class="firm-label">Firma</span>
+                            <img class="img-div" (click)="photoURL.click()" style="object-fit: contain;" [src]="photo"
+                                alt="fotografía">
                         </div>
                         <mat-progress-bar *ngIf="photos?.resizing$.photoURL | async" style="width:100%"
                             mode="indeterminate">

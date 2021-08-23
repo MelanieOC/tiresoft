@@ -27,8 +27,8 @@ export class InspectionReportsComponent implements OnInit {
   ]
 
   actions = [
-    { icon: 'edit', id: 1 },
-    { icon: 'list', id: 2 }
+    { icon: 'edit', id: 1, tooltip: 'editar' },
+    { icon: 'list', id: 2, tooltip: 'lista' }
   ]
   caps: any = []
   constructor(

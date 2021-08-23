@@ -22,9 +22,9 @@ export class CustomersListComponent implements OnInit {
   ]
 
   actions = [
-    { icon: 'edit', id: 1 },
-    { icon: 'people_alt', id: 2 },
-    { icon: 'precision_manufacturing', id: 3 }
+    { icon: 'edit', id: 1, tooltip: 'editar' },
+    { icon: 'people_alt', id: 2, tooltip: 'contactos' },
+    { icon: 'home_work', id: 3, tooltip: 'plantas' }
   ]
 
   constructor(

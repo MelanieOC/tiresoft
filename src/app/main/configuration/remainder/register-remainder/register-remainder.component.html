@@ -9,7 +9,8 @@
         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
             <mat-form-field class="pl-xs pr-xs" fxFlex="100">
                 <mat-label>Aplicación</mat-label>
-                <input matInput type="text"  autocomplete="off" formControlName="app">
+                <input matInput type="text" autocomplete="off" formControlName="app">
+                <mat-error>Completa este campo.</mat-error>
             </mat-form-field>
         </div>
         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
@@ -26,8 +27,10 @@
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
+    <mat-progress-bar *ngIf="buttonSubmit" style="width:100%" mode="indeterminate">
+    </mat-progress-bar>
     <button mat-stroked-button type="button" mat-dialog-close>Cancelar</button>
-    <button mat-raised-button color="warn" type="button" mat-dialog-close>
+    <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="buttonSubmit">
         Guardar
     </button>
 </mat-dialog-actions>

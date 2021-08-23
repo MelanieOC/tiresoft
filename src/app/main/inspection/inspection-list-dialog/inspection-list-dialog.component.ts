@@ -37,7 +37,7 @@ export class InspectionListDialogComponent implements OnInit {
   ]
 
   actions = [
-    { icon: 'edit', id: 1 }
+    { icon: 'edit', id: 1, tooltip: 'editar' }
   ]
 
   constructor(

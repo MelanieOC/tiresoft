@@ -180,6 +180,8 @@ export class UserFormComponent implements OnInit {
     if (this.userForm.invalid) {
       return;
     }
+
+    this.buttonSubmit = true
     const val = this.userForm.value
     const userData = this.userEdit.name != val.name || this.userEdit.lastName != val.lastName ||
       this.userEdit.phone != val.phone || this.userEdit.role != val.role ||
@@ -188,9 +190,68 @@ export class UserFormComponent implements OnInit {
     const userPass = this.userEdit.password != val.password || this.userEdit.passwordTwo != val.passwordTwo
       || this.userEdit.email != val.email
 
+    const formData = new FormData();
+    formData.append('user_id', this.activatedRoute.snapshot.params.id);
+    formData.append('nombres', val.name);
+    formData.append('apellidos', val.lastName);
+    formData.append('telefono', val.phone);
+    formData.append('imagen_firma', this.photoFile || '');
+    formData.append('role_id', val.role);
+    formData.append('empresas', val.business.join(','));
+
+    const formCredencial = new FormData();
+
+    formCredencial.append('id_user', this.activatedRoute.snapshot.params.id);
+    formCredencial.append('email', val.email);
+    formCredencial.append('password', val.password);
 
     console.log(userData)
     console.log(userPass)
+
+    if (userData && userPass) {
+      console.log('two')
+      combineLatest(
+        this.userService.editDataUser(formData),
+        this.userService.editCredential(formCredencial)
+      ).subscribe(res => {
+        console.log(res)
+        this.buttonSubmit = false
+        Swal.fire({
+          title: 'Editado',
+          text: 'Se guardo los cambios',
+          icon: 'success',
+          heightAuto: false
+        })
+      })
+    } else {
+      if (userPass) {
+        console.log('pass')
+        this.userService.editCredential(formCredencial).subscribe(res => {
+          console.log(res)
+          this.buttonSubmit = false
+          Swal.fire({
+            title: 'Editado',
+            text: 'Se guardo los cambios',
+            icon: 'success',
+            heightAuto: false
+          })
+        })
+      }
+
+      if (userData) {
+        console.log('data')
+        this.userService.editDataUser(formData).subscribe(res => {
+          console.log(res)
+          this.buttonSubmit = false
+          Swal.fire({
+            title: 'Editado',
+            text: 'Se guardo los cambios',
+            icon: 'success',
+            heightAuto: false
+          })
+        })
+      }
+    }
   }
 
   errors(error) {

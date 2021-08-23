@@ -9,11 +9,11 @@ const routes: Routes = [
     component: UserListComponent
   },
   {
-    path: 'create',
+    path: 'crear',
     component: UserFormComponent
   },
   {
-    path: 'edit/:id',
+    path: 'editar/:id',
     component: UserFormComponent
   }
 ];

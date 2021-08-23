@@ -12,16 +12,18 @@ const routes: Routes = [
     children: [
       {
         path: 'vehiculos',
-        component: ImportVehiclesComponent
-        //data: { permission: 'campaign.create' }
+        component: ImportVehiclesComponent,
+        data: { permission: 'admin.importar.upload' }
       },
       {
         path: 'neumaticos',
-        component: ImportTiresComponent
+        component: ImportTiresComponent,
+        data: { permission: 'admin.importar.upload' }
       },
       {
         path: 'criterios',
-        component: ImportCriteriaComponent
+        component: ImportCriteriaComponent,
+        data: { permission: 'admin.importar.upload' }
       },
       { path: '', redirectTo: 'vehiculos', pathMatch: 'full' }
     ]

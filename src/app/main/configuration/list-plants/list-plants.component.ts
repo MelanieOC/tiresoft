@@ -11,11 +11,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./list-plants.component.scss']
 })
 export class ListPlantsComponent implements OnInit {
-  allData: any = [
-    { name: 'CHANCAY', address: 'Urb. Lotización chacarilla Mz. C Lote 21 Chancay, Huaral Dpto. Lima.', customer: 'CONCREMAX', date: '2021-05-13' },
-    { name: 'HUACHO', address: 'Av. Peru 534 Distrito de Santa Maria, Provincia de Huaura, Departamento Lima', customer: 'CONCREMAX', date: '2021-05-13' },
-    { name: 'PARACAS', address: 'Mza. V Parcela Santa Elena de Paracas - Paracas - Pisco.', customer: 'CONCREMAX', date: '2021-05-13' }
-  ]
+  allData: any = []
   data: any = []
   columns = [
     { name: 'Nombre', slug: 'nombre', stick: true },
@@ -25,8 +21,8 @@ export class ListPlantsComponent implements OnInit {
   ]
 
   actions = [
-    { icon: 'edit', id: 1 },
-    { icon: 'delete', id: 2 }
+    { icon: 'edit', id: 1, tooltip: 'editar' },
+    { icon: 'delete', id: 2, tooltip: 'eliminar' }
   ]
 
   constructor(
@@ -41,11 +37,8 @@ export class ListPlantsComponent implements OnInit {
 
   getData() {
     let cust = this.dbs.customerSelect.value
-    const formData = new FormData();
-    formData.append('cliente_id', cust.id_cliente);
 
-    this.customerService.getListPlants(formData).subscribe(res => {
-      console.log(res)
+    this.customerService.getListPlants({ cliente_id: cust.id_cliente }).subscribe(res => {
       this.allData = res['data']
     })
   }

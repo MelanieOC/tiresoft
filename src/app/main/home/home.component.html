@@ -113,7 +113,8 @@
             <div class="img-div">
                 <img src="../../../assets/img/F1.png" alt="">
             </div>
-            <div echarts [options]="barChartOption1" class="chartContainer"></div>
+            <app-bar-chart [label]="'Índice de reencauche(%)'" [dataX]="months" [dataY]="data1" [type]="1">
+            </app-bar-chart>
         </div>
         <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
             <div class="title">Índice de reencauchabilidad 2021</div>
@@ -122,7 +123,8 @@
             <div class="img-div">
                 <img src="../../../assets/img/F2.png" alt="">
             </div>
-            <div echarts [options]="barChartOption2" class="chartContainer"></div>
+            <app-bar-chart [label]="'Índice de reencauchabilidad'" [dataX]="months" [dataY]="data2" [type]="1">
+            </app-bar-chart>
         </div>
     </div>
     <div fxLayout="row wrap" fxLayoutAlign="space-between center">
@@ -130,33 +132,33 @@
             <div class="title">Neumáticos por Marcas</div>
             <div class="subtitle">No se consideran neumáticos en SCRAP</div>
             <mat-divider></mat-divider>
-            <div echarts [options]="pieChartOption1" class="chartContainer"></div>
+            <app-pie-chart [label]="'Marca'" [data]="dataP1" [type]="1"></app-pie-chart>
         </div>
         <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
             <div class="title">Condición de neumáticos</div>
             <div class="subtitle">No se consideran neumáticos en SCRAP</div>
             <mat-divider></mat-divider>
-            <div echarts [options]="pieChartOption2" class="chartContainer"></div>
+            <app-pie-chart [label]="'Condición'" [data]="dataP2" [type]="1"></app-pie-chart>
         </div>
     </div>
     <div class="ts-card">
         <div class="title">Neumáticos por Diseño</div>
         <div class="subtitle">No se consideran neumáticos en SCRAP</div>
         <mat-divider></mat-divider>
-        <div echarts [options]="barChartOption3" class="chartContainer"></div>
+        <app-bar-chart [label]="'Por Modelo'" [dataX]="brands" [dataY]="data3" [type]="1"></app-bar-chart>
     </div>
     <div fxLayout="row wrap" fxLayoutAlign="space-between center">
         <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
             <div class="title">Neumáticos por Estado</div>
             <div class="subtitle">No se consideran neumáticos en SCRAP</div>
             <mat-divider></mat-divider>
-            <div echarts [options]="pieChartOption3" class="chartContainer"></div>
+            <app-pie-chart [label]="'Estado'" [data]="dataP3" [type]="1"></app-pie-chart>
         </div>
         <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
             <div class="title">Neumáticos por Medida</div>
             <div class="subtitle">No se consideran neumáticos en SCRAP</div>
             <mat-divider></mat-divider>
-            <div echarts [options]="barChartOption4" class="chartContainer"></div>
+            <app-bar-chart [label]="'Neumático'" [dataX]="tiers" [dataY]="data4" [type]="1"></app-bar-chart>
         </div>
     </div>
 </div>

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CriteriaComponent } from './criteria/criteria.component';
-import { ImportDataComponent } from './import-data/import-data.component';
 import { ListPlantsComponent } from './list-plants/list-plants.component';
 import { RateComponent } from './rate/rate.component';
 import { RemainderComponent } from './remainder/remainder.component';
@@ -10,28 +9,33 @@ import { ReportsComponent } from './reports/reports.component';
 const routes: Routes = [
   {
     path: 'listacriterioaceptacion',
-    component: CriteriaComponent
-    //data: { permission: 'campaign.create' }
+    component: CriteriaComponent,
+    data: { permission: 'admin.criterio.list' }
   },
   {
     path: 'tipocambio',
-    component: RateComponent
+    component: RateComponent,
+    data: { permission: 'admin.cambio.list' }
   },
   {
     path: 'remanenteaplicacion',
-    component: RemainderComponent
+    component: RemainderComponent,
+    data: { permission: 'admin.aplicacion.list' }
   },
   {
     path: 'reportes',
-    component: ReportsComponent
+    component: ReportsComponent,
+    data: { permission: 'admin.reportes.list' }
   },
   {
     path: 'importar',
-    loadChildren: () => import('./import-data/import-data.module').then(mod => mod.ImportDataModule)
+    loadChildren: () => import('./import-data/import-data.module').then(mod => mod.ImportDataModule),
+    data: { permission: 'admin.importar.upload' }
   },
   {
     path: 'listado_plantas',
-    component: ListPlantsComponent
+    component: ListPlantsComponent,
+    data: { permission: 'admin.planta.list' }
   }
 ];
 

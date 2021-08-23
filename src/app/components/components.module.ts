@@ -18,6 +18,7 @@ import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginato
 import { MatSortModule } from '@angular/material/sort';
 import { getDutchPaginatorIntl } from 'src/app/services/custom-paginator';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { TableResponsiveComponent } from './table-responsive/table-responsive.component';
@@ -30,12 +31,12 @@ import { TableErrorComponent } from './table-error/table-error.component';
 
 @NgModule({
   declarations: [
-    RegisterFormComponent,  
-    TableResponsiveComponent, 
-    InspectionTireFormComponent, 
-    TitleBarComponent, 
-    UploadFileComponent, 
-    RegisterPlantComponent, 
+    RegisterFormComponent,
+    TableResponsiveComponent,
+    InspectionTireFormComponent,
+    TitleBarComponent,
+    UploadFileComponent,
+    RegisterPlantComponent,
     TableErrorComponent
   ],
   imports: [
@@ -55,9 +56,10 @@ import { TableErrorComponent } from './table-error/table-error.component';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    Ng2ImgMaxModule
+    Ng2ImgMaxModule,
+    MatTooltipModule
   ],
-  exports:[
+  exports: [
     RegisterFormComponent,
     TableResponsiveComponent,
     InspectionTireFormComponent,

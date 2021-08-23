@@ -1,1 +1,9 @@
-<p>customers-contacts works!</p>
+<app-title-bar [title]="'Contactos Cliente'" [return]="true"></app-title-bar>
+<div class="ts-container">
+    <button mat-raised-button color="primary" style="margin: 0px 20px 5px 0px;">
+        <mat-icon style="vertical-align: middle;margin-right: 5px;">add_circle_outline</mat-icon> Nuevo
+    </button>
+    <app-table-responsive [data]="allData" [columns]="columns" [search]="false" [paginate]="false" [actionList]="actions"
+        (onAction)="getAction($event)">
+    </app-table-responsive>
+</div>

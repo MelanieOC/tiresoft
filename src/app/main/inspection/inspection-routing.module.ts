@@ -6,15 +6,18 @@ import { InspectionReportsComponent } from './inspection-reports/inspection-repo
 const routes: Routes = [
   {
     path: 'list',
-    component: InspectionReportsComponent
+    component: InspectionReportsComponent,
+    data: { permission: 'inspec.report.listar' }
   },
   {
     path: 'create',
-    component: InspectionFormComponent
+    component: InspectionFormComponent,
+    data: { permission: 'inspec.register.list' }
   },
   {
     path: 'edit/:id',
-    component: InspectionFormComponent
+    component: InspectionFormComponent,
+    data: { permission: 'inspec.register.edit' }
   },
   { path: '',   redirectTo: 'list', pathMatch: 'full' }
   

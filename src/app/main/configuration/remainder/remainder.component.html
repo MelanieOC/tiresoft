@@ -6,10 +6,10 @@
         Ingrese remanente para que la aplicación se muestre en el registro y edición de vehículo, de no encontrar
         aplicación puede registrarla desde el botón “Nuevo”.
     </div>
-    <button mat-raised-button color="primary" (click)="openDialog()" style="margin-bottom: 25px;">
+    <button mat-raised-button color="primary" (click)="openDialog(null)" style="margin-bottom: 25px;">
         <mat-icon style="vertical-align: middle;margin-right: 5px;">add_circle_outline</mat-icon> Nuevo
     </button>
     <app-table-responsive [data]="allData" [search]="false" [columns]="columns" [paginate]="false"
-        [actionList]="actions" (onAction)="editRegister($event)">
+        [actionList]="actions" (onAction)="getAction($event)">
     </app-table-responsive>
 </div>

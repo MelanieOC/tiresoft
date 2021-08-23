@@ -59,9 +59,12 @@ export class RegisterFormComponent implements OnInit {
       const formC = new FormData()
       formC.append('id_cliente', this.select.id_cliente);
       this.inspectionService.getVehicleList(formC).subscribe(resp => {
-        this.clientList.next(resp['vehiculos'])
-        this.plants = resp['planta']
-        this.inspectForm.get('tow').enable()
+        if(resp['vehiculos']){
+          this.clientList.next(resp['vehiculos'])
+          this.plants = resp['planta']
+          this.inspectForm.get('tow').enable()
+        }
+        
       })
 
     }

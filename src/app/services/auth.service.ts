@@ -29,7 +29,6 @@ export class AuthService {
     if (user) {
       this.user.next(user);
     }
-
   }
 
   public get userValue() {
@@ -54,4 +53,13 @@ export class AuthService {
     this.user.next(null);
     this.router.navigate(['/login']);
   }
+
+  isPermit(slug): boolean {
+    let permissions = []
+    if (this.user.value) {
+      permissions = this.user.value.permissions.map(p => p.slug);
+    }
+    return permissions.includes(slug)
+  }
+
 }

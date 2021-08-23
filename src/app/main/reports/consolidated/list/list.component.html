@@ -1,0 +1,13 @@
+<mat-toolbar class="ts-toolbar">
+    <span>Reporte Consolidado</span>
+</mat-toolbar>
+<div class="ts-container">
+    <app-table-responsive [data]="allData" [columns]="columns" [search]="true" [paginate]="true" [actionList]="actions"
+        (onAction)="getAction($event)">
+        <ng-container slot="new">
+            <button mat-raised-button color="primary" routerLink="generar" style="margin: 0px 20px 5px 0px;">
+                 Generar Reporte
+            </button>
+        </ng-container>
+    </app-table-responsive>
+</div>

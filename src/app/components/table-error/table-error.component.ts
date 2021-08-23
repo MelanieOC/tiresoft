@@ -15,6 +15,7 @@ export class TableErrorComponent implements OnInit {
 
   @Input() data: any[]
   @Input() columns: any[]
+  @Input() errors: any[]
 
   @Output() onAction = new EventEmitter<any>();
 
@@ -38,7 +39,11 @@ export class TableErrorComponent implements OnInit {
 
 
   ngOnChanges() {
-    this.dataSource.data = this.data
+    this.dataSource.data = [...this.data].map((dt,ind)=>{
+      dt.error = this.errors[ind].error;
+      dt.list = this.errors[ind].list.join(', ');
+      return dt
+    })
   }
 
   /*edit(event, row, type) {

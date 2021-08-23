@@ -1,11 +1,19 @@
-.img-div{
+.img-div {
     width: 100%;
     height: 200px;
+    cursor: pointer;
 }
 
-.first_img{
+.first_img {
     background-color: #f4f4f4;
     color: #b0b0b0;
     border: 1px dashed;
-    cursor: pointer;
+}
+
+.firm-label {
+    background-color: #fff;
+    color: #b0b0b0;
+    border: 1px dashed;
+    padding: 3px 5px;
+    position: absolute;
 }

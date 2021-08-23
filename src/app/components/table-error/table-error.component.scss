@@ -17,14 +17,6 @@ tr.example-detail-row {
     height: 0;
 }
 
-tr.example-element-row:not(.example-expanded-row):hover {
-    background: whitesmoke;
-}
-
-tr.example-element-row:not(.example-expanded-row):active {
-    background: #efefef;
-}
-
 .example-element-row td {
     border-bottom-width: 0;
 }
@@ -48,4 +40,8 @@ tr.example-element-row:not(.example-expanded-row):active {
 .detail-container::-webkit-scrollbar-thumb {
     background-color: #a0a0a0;
     border-radius: 5px;
+}
+
+.noSpokesmen {
+    background-color: #f8d7da;
 }

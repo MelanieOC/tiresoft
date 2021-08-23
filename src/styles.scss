@@ -148,7 +148,7 @@ mat-sidenav.sidebar-panel {
   & .title {
     font-weight: 600;
     font-size: 1.2em;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
   }
 
   & .subtitle {
@@ -188,4 +188,8 @@ mat-sidenav.sidebar-panel {
   width: 100%;
   border-bottom: 2px solid #3f51b5;
   font-size: 1em;
+}
+
+.excelTable .mat-cell {
+  font-size: .9em!important;
 }

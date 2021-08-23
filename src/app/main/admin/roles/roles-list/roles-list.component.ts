@@ -21,8 +21,8 @@ export class RolesListComponent implements OnInit {
   ]
 
   actions = [
-    { icon: 'edit', id: 1 },
-    { icon: 'delete', id: 2 }
+    { icon: 'edit', id: 1, tooltip: 'editar' },
+    { icon: 'delete', id: 2, tooltip: 'eliminar' }
   ]
 
   constructor(
@@ -78,10 +78,7 @@ export class RolesListComponent implements OnInit {
             this.allData = res['data']
           })
         })
-
-      } else {
-
-      }
+      } 
     });
   }
 

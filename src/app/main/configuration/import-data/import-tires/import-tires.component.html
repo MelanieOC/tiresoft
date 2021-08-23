@@ -1,29 +1,41 @@
-<div class="row clearfix">
-    <button mat-flat-button color="primary" style="margin-bottom: 10px" (click)="downloadXls()">
-        <mat-icon style="margin-right: 8px">cloud_download</mat-icon>
-        Descargar formato
-    </button>
-    <div style="padding: 15px;">
-        <h4><b>Pasos para importar los neumáticos</b></h4>
-        <p><span class="step">PASO 1</span> Solo arrastre el archivo excel de la plantilla realizada</p>
-        <p><span class="step">PASO 2</span> Una vez seleccionado el archivo el sistema verificará si es correcto el
-            archivo</p>
-        <p><span class="step">PASO 3</span> Para verificar si los datos se relacionaron con el sistema, haz click en
-            <a mat-stroked-button color="primary" href="https://www.google.com/" target="_blank">Ir al registro de
-                Neumáticos</a>
-            y te rediccionará a la lista de Neumáticos.
-        </p>
-    </div>
-    <div class="alert-div" role="alert">
-        <mat-icon style="vertical-align: middle;margin-right: 3px;">report_problem</mat-icon>
-        Antes de importar su excel verificar que los datos no se repliquen en las columnas <strong>'disenio por
-            reencauche'</strong> y <strong>'modelo'.</strong>
-    </div>
+<button mat-flat-button color="primary" style="margin-bottom: 10px" (click)="downloadXls()">
+    <mat-icon style="margin-right: 8px">cloud_download</mat-icon>
+    Descargar formato
+</button>
+<div class="alert-div" role="alert">
+    <mat-icon style="vertical-align: middle;margin-right: 3px;">report_problem</mat-icon>
+    Es obligatorio las columnas de titulos de color rojo ya que de este dependera que se relacione con la
+    configuración que registrarás para los neumáticos.
+</div>
+<div class="alert-div" role="alert">
+    <mat-icon style="vertical-align: middle;margin-right: 3px;">report_problem</mat-icon>
+    Antes de importar su excel verificar que los datos no se repliquen en las columnas <strong>'disenio por
+        reencauche'</strong> y <strong>'modelo'.</strong>
+</div>
+<div style="padding: 15px;">
+    <h4><b>Pasos para importar los neumáticos</b></h4>
+    <p><span class="step">PASO 1</span> Solo arrastre el archivo excel de la plantilla realizada</p>
+    <p><span class="step">PASO 2</span> Una vez seleccionado el archivo el sistema verificará si es correcto el
+        archivo</p>
+    <p><span class="step">PASO 3</span> Para verificar si los datos se relacionaron con el sistema, haz click en
+        <a mat-stroked-button color="primary">Ir al registro de Neumáticos</a>
+        y te rediccionará a la lista de Neumáticos.
+    </p>
 </div>
 
-
-<app-upload-file (getFile)="onFileSelected($event)"></app-upload-file>
+<app-upload-file (getFile)="onFileSelected($event)" [again]="reboot"></app-upload-file>
 <div *ngIf="allData.length">
-    <app-table-error [data]="allData" [columns]="columns">
+    <app-table-error [data]="allData" [columns]="columns" [errors]="errorList">
     </app-table-error>
+    <div *ngIf="observs" class="message-div error">
+        Tiene {{observs}} observaciones, por favor corregir el archivo para subir
+    </div>
+    <div *ngIf="!observs" class="message-div success">
+        El archivo está correcto, de click en <b>Enviar</b>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="end end" *ngIf="!observs">
+        <button mat-raised-button color="primary" (click)="send()" [disabled]="buttonSubmit">Enviar</button>
+    </div>
+    <mat-progress-bar *ngIf="buttonSubmit" style="width:100%" mode="indeterminate">
+    </mat-progress-bar>
 </div>

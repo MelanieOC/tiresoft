@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef,Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-upload-file',
@@ -10,11 +10,19 @@ export class UploadFileComponent implements OnInit {
   @ViewChild("fileDropRef", { static: false }) fileDropEl: ElementRef;
   files: any[] = [];
 
+  @Input() again: boolean
   @Output() getFile = new EventEmitter<any>();
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges() {
+    console.log(this.again)
+    if (this.again) {
+      this.deleteFile(0)
+    }
   }
 
   /**
@@ -36,6 +44,7 @@ export class UploadFileComponent implements OnInit {
    * @param index (File index)
    */
   deleteFile(index: number) {
+    console.log(index)
     if (this.files[index].progress < 100) {
       console.log("Upload in progress.");
       return;
