@@ -1,0 +1,75 @@
+<div class="table-responsive tableScrollStickyHeader" infiniteScroll #scrollThree [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+    <table style="width: 100%;">
+        <thead>
+            <tr>
+                <th rowspan="2" style="vertical-align: middle;">Fecha Inspección</th>
+                <th rowspan="2" style="vertical-align: middle;">Km. Inspección</th>
+                <th rowspan="2" style="vertical-align: middle;">Tipo</th>
+                <th colspan="2" style="vertical-align: middle;">Vehículo </th>
+                <th rowspan="2" style="vertical-align: middle;">Pos.</th>
+                <th rowspan="2" style="vertical-align: middle;">Marca de Neumático</th>
+                <th rowspan="2" style="vertical-align: middle;">Medida</th>
+                <th rowspan="2" style="vertical-align: middle;">Modelo</th>
+                <th rowspan="2" style="vertical-align: middle;">Estado</th>
+                <th rowspan="2" style="vertical-align: middle;">Diseño de Reencauche</th>
+                <th rowspan="2" style="vertical-align: middle;">Empresa Reencauchadora.</th>
+                <th rowspan="2" style="vertical-align: middle;">Serie</th>
+                <th colspan="3">Válvula</th>
+                <th colspan="2">Presión</th>
+                <th rowspan="2" style="vertical-align: middle;">Estado</th>
+                <th colspan="5">NSD</th>
+                <th rowspan="2" style="vertical-align: middle;">Observaciones</th>
+            </tr>
+            <tr>
+                <th style="vertical-align: middle;">Marca</th>
+                <th style="vertical-align: middle;">Placa</th>
+                <th style="vertical-align: middle;">Tapa</th>
+                <th style="vertical-align: middle;">Inacc.</th>
+                <th style="vertical-align: middle;">Malog.</th>
+                <th style="vertical-align: middle;">Actual</th>
+                <th style="vertical-align: middle;">Recom.</th>
+                <th style="vertical-align: middle;">Orig.</th>
+                <th style="vertical-align: middle;">1</th>
+                <th style="vertical-align: middle;">2</th>
+                <th style="vertical-align: middle;">3</th>
+                <th style="vertical-align: middle;">NSD Min</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of sliceData">
+                <td class="text-center" style="vertical-align: middle;" *ngIf="p.first" [attr.rowspan]="p.pos">
+                    {{p.fecha_inspeccion | date:'dd/MM/yyy'}}</td>
+                <td class="text-center" style="vertical-align: middle;" *ngIf="p.first" [attr.rowspan]="p.pos">
+                    {{p.km_inspeccion}}</td>
+                <td class="text-center" style="vertical-align: middle;" *ngIf="p.first" [attr.rowspan]="p.pos">
+                    {{p.tipo_vehiculo}}</td>
+                <td class="text-center" style="vertical-align: middle;" *ngIf="p.first" [attr.rowspan]="p.pos">
+                    {{p.marca_vehiculo}}</td>
+                <td class="text-center" style="vertical-align: middle !important;" *ngIf="p.first"
+                    [attr.rowspan]="p.pos">
+                    {{p.placa}}</td>
+                <td class="text-center">{{p.posicion}}</td>
+                <td class="text-center">{{p.marca_neumatico}}</td>
+                <td class="text-center">{{p.medida_neumatico}}</td>
+                <td class="text-center">{{p.modelo_neumatico}}</td>
+                <td class="text-center">{{p.estado}}</td>
+                <td class="text-center">{{p.id_disenio || '-'}}</td>
+                <td class="text-center">-</td>
+                <td class="text-center">{{p.num_serie}}</td>
+                <td class="text-center">{{p.valvula}}</td>
+                <td class="text-center">{{p.inaccesibilidad}}</td>
+                <td class="text-center">{{p.malogrado}}</td>
+                <td class="text-center">{{p.presion_actual || '-'}}</td>
+                <td class="text-center">{{p.presion_recomendada}}</td>
+                <td class="text-center">{{p.estado_presion}}</td>
+                <td class="text-center">{{p.remanente_original}}</td>
+                <td class="text-center">{{p.rem_exterior}}</td>
+                <td class="text-center">{{p.rem_medio || ''}}</td>
+                <td class="text-center">{{p.rem_interior}}</td>
+                <td class="text-center">{{p.NSD}}</td>
+                <td class="text-center">{{p.recomendacion}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

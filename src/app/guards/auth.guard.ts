@@ -22,8 +22,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   canActivateChild(route: ActivatedRouteSnapshot): boolean {
     let permissions = this.auth.user.value.permissions.map(p => p.slug);
-
-    if (permissions.indexOf(route.data.permission) !== -1 || route.data.permission === 'all') {
+    let all = permissions.filter(p => route.data.all ? p.includes(route.data.all) : false)
+    if (permissions.indexOf(route.data.permission) !== -1 || route.data.permission === 'all' || all.length > 0) {
       return true;
     } else {
       this.router.navigate(['/login']);

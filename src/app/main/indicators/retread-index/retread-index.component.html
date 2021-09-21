@@ -1,1 +1,74 @@
-<p>retread-index works!</p>
+<div class="ts-container">
+    <mat-card>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between baseline">
+            <mat-form-field>
+                <mat-label>Año</mat-label>
+                <mat-select [formControl]="year">
+                    <mat-option *ngFor="let y of years" [value]="y">
+                        {{y}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button mat-raised-button color="primary">
+                <mat-icon style="vertical-align: middle;margin-right: 5px;">download</mat-icon> Exportar Excel
+            </button>
+        </div>       
+    </mat-card>
+    <div class="ts-card">
+        <div class="title">Registro Anual de Indicadores</div>
+        <mat-divider></mat-divider>
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <div><b>Índice de reencauche:</b></div>
+            <div class="img-div">
+                <img src="../../../assets/img/F1.png" alt="">
+            </div>
+        </div>
+        <div class="tableScrollStickyHeader" style="margin-top: 15px;">
+            <table class="table table-hover">
+                <thead style="background-color: black;color: white;">
+                    <tr>
+                        <th style="text-align: center;">Proceso</th>
+                        <th style="text-align: center;">Indicador</th>
+                        <th style="text-align: center;">Criterio de Aceptación</th>
+                        <th *ngFor="let m of months">{{m}}</th>
+                    </tr>
+                </thead>
+                <tbody class="table-center-middle">
+                    <tr>
+                        <td>KPI</td>
+                        <td>Índice de reencauche</td>
+                        <td>
+                            <table class="table-div">
+                                <tbody>
+                                    <tr class="bg-green">
+                                        <td style="padding: 0;"> Objetivo</td>
+                                        <td style="padding: 0;">&lt; 90% </td>
+                                    </tr>
+                                    <tr class="bg-orange">
+                                        <td style="padding: 0;">Tolerable</td>
+                                        <td style="padding: 0;"> [50% - 90%] </td>
+                                    </tr>
+                                    <tr class="bg-red">
+                                        <td style="padding: 0;"> Deficiente </td>
+                                        <td style="padding: 0;">&gt; 50%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td *ngFor="let d of data1" style="border: solid 1px;"
+                            [ngClass]="{'bg-green': d>90, 'bg-orange':d<90, 'bg-red':d<50&&d>0}">
+                            {{d ? d+'%' : ''}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="ts-card">
+        <div class="title">Gráfico estadistico de índice de reencauche</div>
+        <mat-divider></mat-divider>
+        <app-bar-chart [label]="'Índice de reencauche(%)'" [dataX]="months" [dataY]="data1" [type]="1">
+        </app-bar-chart>
+    </div>
+</div>

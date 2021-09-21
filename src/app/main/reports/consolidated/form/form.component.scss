@@ -13,35 +13,10 @@ table {
     text-align: center;
 }
 
-.tablewithoutScrollStickyHeader table thead th {
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 18px;
-    padding: 7px;
-    border: 1px solid #fff;
-    background-color: #555555;
-    color: white;
-    text-align: center;
-}
-
-.tablewithoutScrollStickyHeader table tfoot th {
-    font-size: 11px;
-    line-height: 16px;
-    padding: 15px;
-    color: #454545;
-}
-
-.tablewithoutScrollStickyHeader table tbody td {
-    font-size: 11px;
-    line-height: 16px;
-    padding: 5px 10px;
-    border: 1px solid #eee;
-}
 
 .tableScrollStickyHeader {
     overflow: auto;
     max-height: 500px;
-    margin-top: 20px;
 }
 
 .tableScrollStickyHeader::-webkit-scrollbar {
@@ -56,9 +31,9 @@ table {
 
 .tableScrollStickyHeader table thead th {
     font-weight: 500;
-    font-size: 13px;
-    line-height: 18px;
-    padding: 7px;
+    font-size: 12px;
+    line-height: 22px;
+    padding: 5px;
     border: 1px solid #fff;
     background-color: #555555;
     color: white;
@@ -70,11 +45,17 @@ table {
     top: 0;
 }
 
+.tableScrollStickyHeader table tfoot {
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+}
+
 .tableScrollStickyHeader table tfoot th {
     font-size: 11px;
     line-height: 16px;
-    padding: 15px;
-    color: #454545;
+    padding: 5px 10px;
+    border: 1px solid #eee;
 }
 
 .tableScrollStickyHeader table tbody td {
@@ -84,52 +65,12 @@ table {
     border: 1px solid #eee;
 }
 
+
+
 .tr-odd {
     background-color: rgba(69, 69, 69, 0.03);
 }
 
-.tableScrollStickyHeaderTwo {
-    overflow: auto;
-    max-height: 1000px;
-}
-
-.tableScrollStickyHeaderTwo::-webkit-scrollbar {
-    width: 6px;
-    height: 5px;
-}
-
-.tableScrollStickyHeaderTwo::-webkit-scrollbar-thumb {
-    background-color: #a0a0a0;
-    border-radius: 5px;
-}
-
-.tableScrollStickyHeaderTwo table thead th {
-    position: sticky;
-    top: 0;
-    background-color: #fff;
-    font-weight: 600;
-    font-size: 12.5px;
-    line-height: 19px;
-    color: #454545;
-    padding: 15px 0;
-    border-bottom: 0.25px solid rgba(69, 69, 69, 0.1);
-}
-
-.tableScrollStickyHeaderTwo table tbody tr {
-    border-bottom: 0.25px solid rgba(69, 69, 69, 0.1);
-}
-
-.tableScrollStickyHeaderTwo table tbody tr li {
-    font-size: 13px;
-    line-height: 19px;
-    color: #454545;
-}
-
-.tableScrollStickyHeaderTwo table tbody tr li a {
-    font-size: 13px;
-    line-height: 19px;
-    color: #454545;
-}
 
 .blue{
     background-color: royalblue;
@@ -139,4 +80,40 @@ table {
 .orange{
     background-color: orange;
     color: white;
+}
+
+.text-bold{
+    font-weight: 600;
+}
+
+.total-div{
+    margin: 12px 0 12px auto;
+    font-weight: 500;
+    padding: 3px 10px;
+    border: 1px solid #b0b0b0;
+    width: fit-content;
+}
+
+.table-div {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    max-width: 220px;
+    min-width: 170px;
+    margin: auto;
+}
+
+.bg-green {
+    background-color: #4caf50 !important;
+    color: #fff;
+}
+
+.bg-orange {
+    background-color: #ff9800 !important;
+    color: #fff;
+}
+
+.bg-red {
+    background-color: #f44336 !important;
+    color: #fff;
 }

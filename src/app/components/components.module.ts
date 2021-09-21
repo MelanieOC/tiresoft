@@ -19,6 +19,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { getDutchPaginatorIntl } from 'src/app/services/custom-paginator';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { TableResponsiveComponent } from './table-responsive/table-responsive.component';
@@ -27,6 +28,8 @@ import { TitleBarComponent } from './title-bar/title-bar.component';
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { RegisterPlantComponent } from './register-plant/register-plant.component';
 import { TableErrorComponent } from './table-error/table-error.component';
+import { TableInfiniteScrollComponent } from './table-infinite-scroll/table-infinite-scroll.component';
+import { MessageDialogComponent } from './message-dialog/message-dialog.component';
 
 
 @NgModule({
@@ -37,7 +40,9 @@ import { TableErrorComponent } from './table-error/table-error.component';
     TitleBarComponent,
     UploadFileComponent,
     RegisterPlantComponent,
-    TableErrorComponent
+    TableErrorComponent,
+    TableInfiniteScrollComponent,
+    MessageDialogComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +62,8 @@ import { TableErrorComponent } from './table-error/table-error.component';
     MatPaginatorModule,
     MatSortModule,
     Ng2ImgMaxModule,
-    MatTooltipModule
+    MatTooltipModule,
+    InfiniteScrollModule
   ],
   exports: [
     RegisterFormComponent,
@@ -66,7 +72,8 @@ import { TableErrorComponent } from './table-error/table-error.component';
     TitleBarComponent,
     UploadFileComponent,
     RegisterPlantComponent,
-    TableErrorComponent
+    TableErrorComponent,
+    TableInfiniteScrollComponent
   ],
   providers: [
     { provide: MatPaginatorIntl, useValue: getDutchPaginatorIntl() }

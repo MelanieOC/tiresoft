@@ -23,8 +23,8 @@
                             </span>
                         </a>
                     </mat-nav-list>
-                    <mat-accordion>
-                        <mat-expansion-panel *ngFor="let item of menuItems">
+                    <div *ngFor="let item of menuItems">
+                        <mat-expansion-panel *ngIf="item.type=='children'">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <mat-nav-list>
@@ -46,7 +46,15 @@
                                 </a>
                             </mat-nav-list>
                         </mat-expansion-panel>
-                    </mat-accordion>
+                        <mat-nav-list style="width: 100%" class="admin" *ngIf="item.type=='single'">
+                            <a mat-list-item [routerLink]="[item.state]" routerLinkActive="active">
+                                <mat-icon mat-list-icon class="mat-icon-menu">{{item.icon}}</mat-icon>
+                                <span class="mat-item-list-span">
+                                    {{item.name}}
+                                </span>
+                            </a>
+                        </mat-nav-list>
+                    </div>
                     <mat-nav-list style="width: 100%" class="admin">
                         <a mat-list-item routerLink="clientes" (click)="deselectClient()"
                             routerLinkActive="nav-active">
@@ -59,7 +67,7 @@
                 </div>
             </div>
             <ng-template #select>
-                <mat-expansion-panel>
+                <mat-expansion-panel *ngIf="isPermit(['admin.role.list','admin.user.list','admin.client.list'])">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
                             <mat-nav-list>
@@ -73,19 +81,19 @@
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <mat-nav-list>
-                        <a mat-list-item class="mat-list-item-second" [routerLink]="['admin', 'roles']"
+                        <a mat-list-item class="mat-list-item-second" *ngIf="isPermit(['admin.role.list'])" [routerLink]="['admin', 'roles']"
                             routerLinkActive="active">
                             <span class="mat-item-list-span">
                                 Roles
                             </span>
                         </a>
-                        <a mat-list-item class="mat-list-item-second" [routerLink]="['admin', 'usuarios']"
+                        <a mat-list-item class="mat-list-item-second" *ngIf="isPermit(['admin.user.list'])" [routerLink]="['admin', 'usuarios']"
                             routerLinkActive="active">
                             <span class="mat-item-list-span">
                                 Usuarios
                             </span>
                         </a>
-                        <a mat-list-item class="mat-list-item-second" [routerLink]="['admin', 'clientes']"
+                        <a mat-list-item class="mat-list-item-second" *ngIf="isPermit(['admin.client.list'])" [routerLink]="['admin', 'clientes']"
                             routerLinkActive="active">
                             <span class="mat-item-list-span">
                                 Clientes

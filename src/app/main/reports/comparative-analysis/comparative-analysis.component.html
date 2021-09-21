@@ -1,1 +1,16 @@
-<p>comparative-analysis works!</p>
+<mat-toolbar class="ts-toolbar">
+    <span>Análisis comparativo de neumáticos</span>
+</mat-toolbar>
+<nav mat-tab-nav-bar>
+    <a mat-tab-link routerLink="configuracion" routerLinkActive #confi="routerLinkActive" [active]="confi.isActive">
+        Por Configuración
+    </a>
+    <a mat-tab-link routerLink="marcas" routerLinkActive #brand="routerLinkActive" [active]="brand.isActive">
+        Por marcas
+    </a>
+</nav>
+<div class="ts-container">
+    <div class="ts-card">
+        <router-outlet></router-outlet>
+    </div>
+</div>

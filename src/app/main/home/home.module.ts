@@ -5,8 +5,6 @@ import { MaterialModule } from 'src/app/material/material.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
-import { NgxEchartsModule } from 'ngx-echarts';
-import * as echarts from 'echarts';
 import { GraphicsModule } from 'src/app/graphics/graphics.module';
 
 @NgModule({
@@ -16,8 +14,7 @@ import { GraphicsModule } from 'src/app/graphics/graphics.module';
     HomeRoutingModule,
     MaterialModule,
     Ng2ImgMaxModule,
-    GraphicsModule,
-    NgxEchartsModule.forRoot({ echarts })
+    GraphicsModule
   ]
 })
 export class HomeModule { }

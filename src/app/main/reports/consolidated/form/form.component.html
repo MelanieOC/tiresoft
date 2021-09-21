@@ -1,5 +1,7 @@
 <mat-toolbar class="ts-toolbar">
     <span>Generar Reporte</span>
+    <span fxFlex></span>
+    <a mat-stroked-button color="primary" routerLink="historial">Historial</a>
 </mat-toolbar>
 <div class="ts-container">
     <mat-card>
@@ -24,27 +26,51 @@
     </mat-card>
     <mat-progress-bar *ngIf="load" style="width:100%" mode="indeterminate">
     </mat-progress-bar>
-    <mat-card style="margin-top: 25px;">
-        <div fxLayout="row wrap" fxLayoutAlign="space-between start">
-            <div>
-                <div>REPORTE CONSOLIDADO</div>
-                <div>Del 01/03/2021 al 31/03/2021</div>
-            </div>
-            <div>
-                <button mat-raised-button color="warn">
+
+    <div *ngIf="data" style="margin-top: 25px;">
+        <mat-card style="margin-bottom: 25px;">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+                <div>
+                    <div>REPORTE CONSOLIDADO</div>
+                    <div>Del {{filterForm.get('from').value | date:'dd/MM/yyy'}} al
+                        {{filterForm.get('to').value | date:'dd/MM/yyy'}}</div>
+                </div>
+                <button mat-raised-button color="warn" style="margin-right: 12px;">
                     <mat-icon>download</mat-icon> Exportar
                 </button>
-                <button mat-raised-button color="primary">
-                    <mat-icon>launch</mat-icon> Cargar Reporte
+                <!--div>
+                    <button mat-raised-button color="warn" style="margin-right: 12px;">
+                        <mat-icon>download</mat-icon> Exportar
+                    </button>
+                    <button mat-raised-button color="primary">
+                        <mat-icon>launch</mat-icon> Cargar Reporte
+                    </button>
+                </div-->
+            </div>
+        </mat-card>
+        <div class="ts-card">
+            <div class="title">Recomendaciones</div>
+            <mat-divider></mat-divider>
+            <button mat-stroked-button style="margin: 10px 0;">Agregar Recomendación</button>
+            <div *ngFor="let w of recommendations" fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <div fxFlex="90" fxFlex.gt-md="95">
+                    <mat-form-field style="width: 100%">
+                        <textarea matInput autocomplete="off" [value]="w"></textarea>
+                        <!--input matInput autocomplete="off" (blur)="edit(w)" (keydown)="keydown($event,w)"
+                            [(ngModel)]="w" autofocus-->
+                    </mat-form-field>
+                </div>
+                <button mat-icon-button color="warn">
+                    <mat-icon>close</mat-icon>
                 </button>
             </div>
         </div>
-    </mat-card>
-    <div *ngIf="data" style="margin-top: 25px;">
-
         <div class="ts-card">
             <div class="title">Equipos inspeccionados</div>
             <mat-divider></mat-divider>
+            <div class="total-div">
+                Total equipos: {{equipments.length}}
+            </div>
             <div class="table-responsive tableScrollStickyHeader">
                 <table style="width: 100%;">
                     <thead>
@@ -70,11 +96,17 @@
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Distribución de Medidas de Neumáticos</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total neumáticos: {{total[1]}}
+                </div>
                 <app-pie-chart [label]="'Neumático'" [data]="dataPieTires" [type]="2"></app-pie-chart>
             </div>
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Posición de rueda según marca</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total neumáticos: {{total[2]}}
+                </div>
                 <app-pie-chart [label]="'Marca'" [data]="dataPieBrand" [type]="2"></app-pie-chart>
             </div>
         </div>
@@ -82,23 +114,35 @@
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Distribución de Marcas por eje direccional</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total: {{total[3]}}
+                </div>
                 <app-bar-chart [label]="'Cantidad'" [dataX]="dataBarD[0]" [dataY]="dataBarD[1]" [type]="2">
                 </app-bar-chart>
             </div>
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Distribución de Marcas por eje tracción</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total: {{total[4]}}
+                </div>
                 <app-bar-chart [label]="'Cantidad'" [dataX]="dataBarT[0]" [dataY]="dataBarT[1]" [type]="2">
                 </app-bar-chart>
             </div>
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Distribución de Marcas por eje apoyo</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total: {{total[5]}}
+                </div>
             </div>
         </div>
         <div class="ts-card">
             <div class="title">Resumen de Neumáticos En mal estado</div>
             <mat-divider></mat-divider>
+            <div class="total-div">
+                Total: {{total[6]}}
+            </div>
             <div class="table-responsive tableScrollStickyHeader">
                 <table style="width: 100%;">
                     <thead>
@@ -127,6 +171,9 @@
         <div class="ts-card">
             <div class="title">Resumen de Neumáticos para retiro</div>
             <mat-divider></mat-divider>
+            <div class="total-div">
+                Total: {{total[7]}}
+            </div>
             <div class="table-responsive tableScrollStickyHeader">
                 <table style="width: 100%;">
                     <thead>
@@ -169,11 +216,11 @@
         <div class="ts-card">
             <div class="title">Niveles de remanente por unidad</div>
             <mat-divider></mat-divider>
-            <div class="table-responsive tableScrollStickyHeader">
+            <div class="table-responsive tableScrollStickyHeader" style="margin-top: 20px;">
                 <table style="width: 100%;">
                     <thead>
                         <tr>
-                            <th colspan="2"></th>
+                            <th colspan="3"></th>
                             <th [attr.colspan]="levelsNum.length">Posiciones</th>
                             <th></th>
                             <th colspan="2">Para Reemplazar</th>
@@ -181,6 +228,7 @@
                         <tr>
                             <th>Vehículo</th>
                             <th>Placa</th>
+                            <th>Fecha</th>
                             <th *ngFor="let ind of levelsNum">{{ind}}</th>
                             <th>Total</th>
                             <th>Reencauchar</th>
@@ -189,13 +237,16 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of levelsUnit">
-                            <td class="text-center">{{item.nomtipo}}</td>
-                            <td class="text-center">{{item.placa}}</td>
+                            <td class="text-center" *ngIf="item.ind==0" [attr.rowspan]="item.pos">
+                                {{item.nomtipo}}</td>
+                            <td class="text-center" *ngIf="item.ind==0" [attr.rowspan]="item.pos">
+                                {{item.placa}}</td>
+                            <td class="text-center">{{item.fecha | date: 'MMMM' | titlecase}}</td>
                             <td class="text-center" *ngFor="let p of item.positions"
                                 [ngClass]="{'blue': p.color == 'blue', 'orange': p.color == 'orange'}">
                                 {{p.name}}
                             </td>
-                            <td class="text-center">{{item.nroneumaticos}}</td>
+                            <td class="text-center">{{item.total}}</td>
                             <td class="text-center">{{item.remind || ''}}</td>
                             <td class="text-center">{{item.next || ''}}</td>
                         </tr>
@@ -203,19 +254,19 @@
                     </tbody>
                     <tfoot>
                         <tr style="font-weight: bold;">
-                            <td colspan="2" rowspan="2"
+                            <th colspan="3" rowspan="2"
                                 style="text-align:left !important; vertical-align: middle !important; border-right-color: white;">
-                                TOTAL </td>
-                            <td [attr.colspan]="levelsNum.length" rowspan="2" style="border-right-color: white;"></td>
-                            <td rowspan="2" style="vertical-align: middle !important; border-left-color: white;">
+                                TOTAL </th>
+                            <th [attr.colspan]="levelsNum.length" rowspan="2" style="border-right-color: white;"></th>
+                            <th rowspan="2" style="vertical-align: middle !important; border-left-color: white;">
                                 {{levelsUnitTotal[0]}}
-                            </td>
-                            <td> {{levelsUnitTotal[1]}} </td>
-                            <td> {{levelsUnitTotal[2]}} </td>
+                            </th>
+                            <th> {{levelsUnitTotal[1]}} </th>
+                            <th> {{levelsUnitTotal[2]}} </th>
                         </tr>
                         <tr>
-                            <td> 2.9 %</td>
-                            <td> 7.7 %</td>
+                            <th> {{levelsUnitTotal[3]}} %</th>
+                            <th> {{levelsUnitTotal[4]}} %</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -224,6 +275,9 @@
         <div class="ts-card">
             <div class="title">Neumáticos para servicio de reencauche</div>
             <mat-divider></mat-divider>
+            <div class="total-div">
+                Total: {{total[9]}}
+            </div>
             <div class="table-responsive tableScrollStickyHeader">
                 <table style="width: 100%;">
                     <thead>
@@ -264,6 +318,9 @@
         <div class="ts-card">
             <div class="title">Rotaciones - Desgastes irregulares</div>
             <mat-divider></mat-divider>
+            <div class="total-div">
+                Total: {{total[10]}}
+            </div>
             <div class="table-responsive tableScrollStickyHeader">
                 <table style="width: 100%;">
                     <thead>
@@ -306,27 +363,124 @@
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Inflado de neumáticos</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total: {{total[11]}}
+                </div>
                 <app-pie-chart [label]="'Estado'" [data]="dataPieTireI" [type]="2"></app-pie-chart>
             </div>
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Presión de inflado de neumáticos</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total: {{total[12]}}
+                </div>
                 <app-pie-chart [label]="''" [data]="dataPiePreasure" [type]="2"></app-pie-chart>
             </div>
         </div>
         <div class="ts-card">
             <div class="title">Niveles de remanente por medida</div>
             <mat-divider></mat-divider>
+            <div class="table-responsive tableScrollStickyHeader" style="margin-top: 20px;">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Aplicación: MIXTA</th>
+                            <th [attr.colspan]="levelsMeasureNum.length+1">
+                                PROFUNDIDAD DE BANDA DE RODAMIENTO EN MILÍMETROS
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Medida</th>
+                            <th *ngFor="let ind of levelsMeasureNum">{{ind}}</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of levelsMeasure">
+                            <td class="text-center">{{item.tipo}}</td>
+                            <td class="text-center">{{item.medida}}</td>
+                            <td class="text-center" *ngFor="let p of item.measures"
+                                [ngClass]="{'blue': p.color == 'blue', 'orange': p.color == 'orange'}">
+                                {{p.total}}
+                            </td>
+                            <td class="text-center">{{item.total}}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center text-bold" colspan="2">Total</td>
+                            <td class="text-center text-bold" *ngFor="let t of levelsMeasureTotal">{{t}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" rowspan="2"></td>
+                            <td [attr.colspan]="levelsMeasureSubTotal[0]" class="text-center">
+                                {{levelsMeasureSubTotal[1]}}</td>
+                            <td [attr.colspan]="levelsMeasureSubTotal[2]" class="text-center">
+                                {{levelsMeasureSubTotal[3]}}</td>
+                            <td [attr.colspan]="levelsMeasureSubTotal[4]" rowspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td [attr.colspan]="levelsMeasureSubTotal[0]" class="text-center">
+                                {{levelsMeasureSubTotal[5]}} %</td>
+                            <td [attr.colspan]="levelsMeasureSubTotal[2]" class="text-center">
+                                {{levelsMeasureSubTotal[6]}} %</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive tableScrollStickyHeader" style="margin-top: 15px;">
+                <table style="width: 100%;text-align: center;">
+                    <thead class="table-head-standar">
+                        <tr>
+                            <th>Aplicación</th>
+                            <th>Reenc.</th>
+                            <th>Próx. Reenc.</th>
+                            <th>Operativo</th>
+                            <th>Total</th>
+                            <th>Porcentaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MIXTA</td>
+                            <td>{{levelsMeasureSubTotal[1]}}</td>
+                            <td>{{levelsMeasureSubTotal[3]}}</td>
+                            <td>{{levelsMeasureSubTotal[7]}}</td>
+                            <td>{{levelsMeasureSubTotal[9]}}</td>
+                            <td>100.0%</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" style="font-weight: bold; vertical-align: middle;">
+                                Total</td>
+                            <td>{{levelsMeasureSubTotal[1]}}</td>
+                            <td>{{levelsMeasureSubTotal[3]}}</td>
+                            <td>{{levelsMeasureSubTotal[7]}}</td>
+                            <td rowspan="2" style="vertical-align: middle;">{{levelsMeasureSubTotal[9]}}</td>
+                            <td rowspan="2" style="vertical-align: middle;">100%</td>
+                        </tr>
+                        <tr>
+                            <td>{{levelsMeasureSubTotal[5]}}%</td>
+                            <td>{{levelsMeasureSubTotal[6]}}%</td>
+                            <td>{{levelsMeasureSubTotal[8]}}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div fxLayout="row wrap" fxLayoutAlign="space-between start">
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Índice de reencauche</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total: {{total[14]}}
+                </div>
                 <app-pie-chart [label]="''" [data]="dataPieRetread" [type]="1"></app-pie-chart>
             </div>
             <div class="ts-card" fxFlex="100" fxFlex.gt-md="49">
                 <div class="title">Índice de reencauchabilidad</div>
                 <mat-divider></mat-divider>
+                <div class="total-div">
+                    Total: {{total[15]}}
+                </div>
                 <app-bar-chart [label]="'Reencauchabilidad'" [dataX]="['Reencauchabilidad']"
                     [dataY]="dataBarRetreadability" [type]="1">
                 </app-bar-chart>
@@ -335,82 +489,59 @@
         <div class="ts-card">
             <div class="title">Inspecciones</div>
             <mat-divider></mat-divider>
-
-            <div class="table-responsive tablewithoutScrollStickyHeader"
-                *ngFor="let item of allInspections | paginate: { itemsPerPage: 1, currentPage: p }">
+            <div class="total-div">
+                Total inspecciones: {{total[16]}}
+            </div>
+            <app-table-infinite-scroll [data]="allInspections"></app-table-infinite-scroll>
+        </div>
+        <div class="ts-card">
+            <div class="title">Costo por Kilometro</div>
+            <mat-divider></mat-divider>
+            <div class="table-responsive tableScrollStickyHeader" style="margin-top: 20px;">
                 <table style="width: 100%;">
                     <thead>
                         <tr>
-                            <th rowspan="2" style="vertical-align: middle;">Fecha Inspección</th>
-                            <th rowspan="2" style="vertical-align: middle;">Km. Inspección</th>
-                            <th rowspan="2" style="vertical-align: middle;">Tipo</th>
-                            <th colspan="2" style="vertical-align: middle;">Vehículo </th>
-                            <th rowspan="2" style="vertical-align: middle;">Pos.</th>
-                            <th rowspan="2" style="vertical-align: middle;">Marca de Neumático</th>
-                            <th rowspan="2" style="vertical-align: middle;">Medida</th>
-                            <th rowspan="2" style="vertical-align: middle;">Modelo</th>
-                            <th rowspan="2" style="vertical-align: middle;">Estado</th>
-                            <th rowspan="2" style="vertical-align: middle;">Diseño de Reencauche</th>
-                            <th rowspan="2" style="vertical-align: middle;">Empresa Reencauchadora.</th>
-                            <th rowspan="2" style="vertical-align: middle;">Serie</th>
-                            <th colspan="3">Válvula</th>
-                            <th colspan="2">Presión</th>
-                            <th rowspan="2" style="vertical-align: middle;">Estado</th>
-                            <th colspan="5">NSD</th>
-                            <th rowspan="2" style="vertical-align: middle;">Observaciones</th>
-                        </tr>
-                        <tr>
-                            <th style="vertical-align: middle;">Marca</th>
-                            <th style="vertical-align: middle;">Placa</th>
-                            <th style="vertical-align: middle;">Tapa</th>
-                            <th style="vertical-align: middle;">Inacc.</th>
-                            <th style="vertical-align: middle;">Malog.</th>
-                            <th style="vertical-align: middle;">Actual</th>
-                            <th style="vertical-align: middle;">Recom.</th>
-                            <th style="vertical-align: middle;">Orig.</th>
-                            <th style="vertical-align: middle;">1</th>
-                            <th style="vertical-align: middle;">2</th>
-                            <th style="vertical-align: middle;">3</th>
-                            <th style="vertical-align: middle;">NSD Min</th>
+                            <th>Proceso</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Medidas</th>
+                            <th>Criterio de aceptación</th>
+                            <th *ngFor="let mt of costListMonths">{{mt | titlecase}}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let p of item.positions; let i = index">
-                            <td style="vertical-align: middle;" *ngIf="i==0" [attr.rowspan]="item.pos">
-                                {{p.fecha_inspeccion | date:'dd/MM/yyy'}}</td>
-                            <td style="vertical-align: middle;" *ngIf="i==0" [attr.rowspan]="item.pos">
-                                {{p.km_inspeccion}}</td>
-                            <td style="vertical-align: middle;" *ngIf="i==0" [attr.rowspan]="item.pos">
-                                {{p.tipo_vehiculo}}</td>
-                            <td style="vertical-align: middle;" *ngIf="i==0" [attr.rowspan]="item.pos">
-                                {{p.marca_vehiculo}}</td>
-                            <td style="vertical-align: middle !important;" *ngIf="i==0" [attr.rowspan]="item.pos">
-                                {{p.placa}}</td>
-                            <td>{{p.posicion}}</td>
-                            <td>{{p.marca_neumatico}}</td>
-                            <td>{{p.medida_neumatico}}</td>
-                            <td>{{p.modelo_neumatico}}</td>
-                            <td>{{p.estado}}</td>
-                            <td>{{p.id_disenio || '-'}}</td>
-                            <td>-</td>
-                            <td>{{p.num_serie}}</td>
-                            <td>{{p.valvula}}</td>
-                            <td>{{p.inaccesibilidad}}</td>
-                            <td>{{p.malogrado}}</td>
-                            <td>{{p.presion_actual || '-'}}</td>
-                            <td>{{p.presion_recomendada}}</td>
-                            <td>{{p.estado_presion}}</td>
-                            <td>{{p.remanente_original}}</td>
-                            <td>{{p.rem_exterior}}</td>
-                            <td>{{p.rem_medio || ''}}</td>
-                            <td>{{p.rem_interior}}</td>
-                            <td>{{p.NSD}}</td>
-                            <td>{{p.recomendacion}}</td>
+                        <tr *ngFor="let item of costList; let i = index">
+                            <td class="text-center" *ngIf="i==0" [attr.rowspan]="costList.length">KPI</td>
+                            <td class="text-center">{{item.marca}}</td>
+                            <td class="text-center">{{item.modelo}}</td>
+                            <td class="text-center">{{item.medida}}</td>
+                            <td class="text-center">
+                                <table class="table-div">
+                                    <tbody>
+                                        <tr class="bg-green">
+                                            <td style="padding: 0;"> Objetivo </td>
+                                            <td style="padding: 0;">&lt; {{item.criterio_superior}} </td>
+                                        </tr>
+                                        <tr class="bg-orange">
+                                            <td style="padding: 0;"> Tolerable </td>
+                                            <td style="padding: 0;"> {{item.rango_c_superior}} -
+                                                {{item.rango_c_inferior}} </td>
+                                        </tr>
+                                        <tr class="bg-red">
+                                            <td style="padding: 0;"> Deficiente </td>
+                                            <td style="padding: 0;"> &gt; {{item.criterio_inferior}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td class="text-center" *ngFor="let p of item.months"
+                                [ngClass]="{'bg-green': p.color == 'green', 'bg-orange': p.color == 'orange', 'bg-red': p.color == 'red'}">
+                                {{p.num}}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <pagination-controls (pageChange)="p = $event"></pagination-controls>
         </div>
     </div>
     <mat-card *ngIf="noData" style="margin-top: 25px;">

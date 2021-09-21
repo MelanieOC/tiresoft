@@ -1,4 +1,7 @@
-<nav mat-tab-nav-bar>
+<mat-toolbar class="ts-toolbar">
+    <span>Indicadores</span>
+</mat-toolbar>
+<!--nav mat-tab-nav-bar>
     <a mat-tab-link routerLink="costoporkilometro" routerLinkActive #costo="routerLinkActive"
         [active]="costo.isActive">
         Costo por Kilómetro/Hora
@@ -11,4 +14,15 @@
         [active]="reencauchabilidad.isActive">
         Índice Reencauchabilidad
     </a>
-</nav>
+</nav-->
+<mat-tab-group>
+    <mat-tab label="Costo por Kilómetro/Hora">
+        <app-cost-per-kilometer></app-cost-per-kilometer>
+    </mat-tab>
+    <mat-tab label="Índice Reencauche">
+        <app-retread-index></app-retread-index>
+    </mat-tab>
+    <mat-tab label="Índice Reencauchabilidad">
+        <app-retreadability-index></app-retreadability-index>
+    </mat-tab>
+  </mat-tab-group>

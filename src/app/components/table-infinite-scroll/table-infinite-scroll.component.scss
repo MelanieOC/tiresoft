@@ -1,0 +1,74 @@
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.tableScrollStickyHeader {
+    overflow: auto;
+    max-height: 500px;
+    margin-top: 20px;
+}
+
+.tableScrollStickyHeader::-webkit-scrollbar {
+    width: 6px;
+    height: 4px;
+}
+
+.tableScrollStickyHeader::-webkit-scrollbar-thumb {
+    background-color: #a0a0a0;
+    border-radius: 5px;
+}
+
+.tableScrollStickyHeader table thead th {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 22px;
+    padding: 5px;
+    border: 1px solid #fff;
+    background-color: #555555;
+    color: white;
+    text-align: center;
+}
+
+.tableScrollStickyHeader table thead {
+    position: sticky;
+    top: 0;
+}
+
+.tableScrollStickyHeader table tfoot {
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+}
+
+.tableScrollStickyHeader table tfoot th {
+    font-size: 11px;
+    line-height: 16px;
+    padding: 5px 10px;
+    border: 1px solid #eee;
+}
+
+.tableScrollStickyHeader table tbody td {
+    font-size: 11px;
+    line-height: 16px;
+    padding: 5px 10px;
+    border: 1px solid #eee;
+}
+
+.blue {
+    background-color: royalblue;
+    color: white;
+}
+
+.orange {
+    background-color: orange;
+    color: white;
+}
+
+.text-bold {
+    font-weight: 600;
+}

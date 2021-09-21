@@ -1,1 +1,12 @@
-<p>wear-curve works!</p>
+<mat-toolbar class="ts-toolbar">
+    <span>Curva de Desgaste</span>
+</mat-toolbar>
+<nav mat-tab-nav-bar>
+    <a mat-tab-link routerLink="vehiculos" routerLinkActive #vehicle="routerLinkActive" [active]="vehicle.isActive">
+        Vehículos
+    </a>
+    <a mat-tab-link routerLink="neumaticos" routerLinkActive #tire="routerLinkActive" [active]="tire.isActive">
+        Neumáticos
+    </a>
+</nav>
+<router-outlet></router-outlet>

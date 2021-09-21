@@ -1,13 +1,9 @@
-<mat-toolbar class="ts-toolbar">
-    <span>Reporte Consolidado</span>
-</mat-toolbar>
+<app-title-bar [title]="'Historial Reporte'" [return]="true"></app-title-bar>
 <div class="ts-container">
-    <app-table-responsive [data]="allData" [columns]="columns" [search]="true" [paginate]="true" [actionList]="actions"
+    <button mat-raised-button color="primary" style="margin-bottom: 15px;">
+        Cargar Reporte
+   </button>
+    <app-table-responsive [data]="allData" [columns]="columns" [search]="false" [paginate]="true" [actionList]="actions"
         (onAction)="getAction($event)">
-        <ng-container slot="new">
-            <button mat-raised-button color="primary" routerLink="generar" style="margin: 0px 20px 5px 0px;">
-                 Generar Reporte
-            </button>
-        </ng-container>
     </app-table-responsive>
 </div>

@@ -77,4 +77,8 @@ export class ConsolidatedReportService {
   getBadTires(data) {//7
     return this.http.post(`${this.url}/api/consolidado/neumaticos/mal/estado`, data)
   }
+
+  getCost(data) {//18
+    return this.http.post(`${this.url}/api/consolidado/costo/kilometro`, data)
+  }
 }
